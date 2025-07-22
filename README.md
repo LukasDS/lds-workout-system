@@ -20,8 +20,9 @@ This project consists of several independent, containerized microservices:
 - **Mobile API:** Entry point and gateway for mobile app requests, routing to backend microservices.
 - **Angular Web App:** Responsive interface to create/edit schedules, enter weights, and view progress. Uses Signals and Standalone Components for a modern Angular experience.
 - **Web API:** Frontend gateway for web app communication, relaying requests to backend services.
-- **Weight Service:** Logic for managing weight data and calculating warmup sets.
-- **Schedule Service:** Manages creation, editing, and deletion of workout splits and routines.
+- **Weight Service:** Logic for managing weight data.
+- **Weight History Service:** Stores and retrieves historical weight data for analysis.
+- **Schedule Service:** Manages creation, editing, and deletion of workout splits, routines and warmup info for exercises.
 - **User Service:** Handles authentication, authorization, and user account management.
 - **Communication:**  
   - **REST/HTTPS:** Frontends to APIs  
