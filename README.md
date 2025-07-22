@@ -65,4 +65,4 @@ This repository follows the **[GitHub Flow](https://docs.github.com/en/get-start
 
 
 ## About
-This demonstration project is built and maintained by Lukas Daugaard Schröder. For questions or architectural discussions, please [contact me](www.linkedin.com/in/lukas-daugaard-schroeder).
+This demonstration project is built and maintained by Lukas Daugaard Schröder. For questions or architectural discussions, please [contact me](https://www.linkedin.com/in/lukas-daugaard-schroeder).
