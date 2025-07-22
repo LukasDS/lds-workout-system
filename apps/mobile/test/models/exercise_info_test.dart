@@ -8,6 +8,6 @@ void main() {
       warmupInfo: (w) => 'called $w',
     );
     expect(exerciseInfo.name, 'Test');
-    expect(exerciseInfo.warmupInfo(10), 'called 10');
+    expect(exerciseInfo.warmupInfo(10.0), 'called 10.0');
   });
 }

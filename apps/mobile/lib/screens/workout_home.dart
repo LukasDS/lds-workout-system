@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:workout/models/exercise_info.dart';
+import 'package:workout/storage/local_storage.dart';
 import 'package:workout/utils/warmup_utils.dart';
 import 'package:workout/widgets/workout_split.dart';
 
@@ -13,6 +14,7 @@ class WorkoutHome extends StatefulWidget {
 }
 
 class _WorkoutHomeState extends State<WorkoutHome> {
+  LocalStorage get localStorage => Provider.of<LocalStorage>(context, listen: false);
   int _currentIndex = 0;
   final PageController _pageController = PageController();
 
@@ -29,9 +31,10 @@ class _WorkoutHomeState extends State<WorkoutHome> {
   }
 
   Future<void> _loadSavedIndex() async {
-    final prefs = await SharedPreferences.getInstance();
+    final currentIndex = await localStorage.getInt('currentIndex');
+    if (currentIndex == null) return;
     setState(() {
-      _currentIndex = prefs.getInt('currentIndex') ?? 0;
+      _currentIndex = currentIndex;
       _pageController.jumpToPage(_currentIndex);
     });
   }
@@ -40,8 +43,7 @@ class _WorkoutHomeState extends State<WorkoutHome> {
     setState(() {
       _currentIndex = index;
     });
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setInt('currentIndex', index);
+    localStorage.setInt('currentIndex', index);
   }
 
   void _onDestinationSelected(int index) {

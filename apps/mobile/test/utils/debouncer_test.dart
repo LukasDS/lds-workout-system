@@ -8,7 +8,7 @@ void main() {
 
     debouncer.run(() { called = true; });
 
-    await Future.delayed(const Duration(microseconds: 150));
+    await Future.delayed(const Duration(milliseconds: 150));
     expect(called, true);
   });
 
