@@ -1,0 +1,6 @@
+{
+  "appTitle": "workout",
+  "@appTitle": {
+    "description": "A workout app for displaying your workout routine and tracking exercise weights"
+  }
+}

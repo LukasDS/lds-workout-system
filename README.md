@@ -5,7 +5,7 @@ This project leverages a microservices architecture with **Flutter**, **Angular*
 
 ## Features at a Glance
 
-- **Flexible workout schedule builder** with warmup calculation suggestions
+- **Flexible workout routine builder** with warmup calculation suggestions
 - **Edit and track weights** for each lift
 - **Smart warmup calculator** based on your working weights
 - **Visualize your performance** over time with dynamic graphs
@@ -18,10 +18,11 @@ This project consists of several independent, containerized microservices:
 
 - **Flutter Mobile App:** Mobile-first UI for reviewing workouts, inputting weights, and seeing warmup sets.
 - **Mobile API:** Entry point and gateway for mobile app requests, routing to backend microservices.
-- **Angular Web App:** Responsive interface to create/edit schedules, enter weights, and view progress. Uses Signals and Standalone Components for a modern Angular experience.
+- **Angular Web App:** Responsive interface to create/edit routines, enter weights, and view progress. Uses Signals and Standalone Components for a modern Angular experience.
 - **Web API:** Frontend gateway for web app communication, relaying requests to backend services.
-- **Weight Service:** Logic for managing weight data and calculating warmup sets.
-- **Schedule Service:** Manages creation, editing, and deletion of workout splits and routines.
+- **Weight Service:** Logic for managing weight data.
+- **Weight History Service:** Stores and retrieves historical weight data for analysis.
+- **Routine Service:** Manages creation, editing, and deletion of workout splits, routines and warmup info for exercises.
 - **User Service:** Handles authentication, authorization, and user account management.
 - **Communication:**  
   - **REST/HTTPS:** Frontends to APIs  
@@ -34,16 +35,16 @@ This project consists of several independent, containerized microservices:
 
 ### MVP
 ![MVP C4 Container Diagram](docs/mvp-container-diagram.svg)
-- **Mobile App:** Hardcoded schedule, but weights are editable, and warmup weights are displayed. Uses Cloud Firestore for data persistence.
+- **Mobile App:** Hardcoded routine, but weights are editable, and warmup weights are displayed. Uses Cloud Firestore for data persistence.
 - **Web App:** User can view their weight progression.
 - **Web API:** Acts as an entry point for all web app client requests and distributes them among backend microservices.
 - **Weight Service:** Manages weights and warmup calculations. Uses Cloud Firestore for data retrieval.
 
 For this stage, the system is designed to be simple and functional, focusing on core features without user management or advanced data handling. While the mobile app is functional, the rest still only locally and is not deployed.
 
-### Version 1: Custom Schedules & User Management
+### Version 1: Custom Routines & User Management
 ![Version 1 C4 Container Diagram](docs/v1-container-diagram.svg)
-This version introduces user management and editable schedules, allowing users to create and manage their workout routines, as described in the System Overview. The mobile app and web app are now fully functional, with user authentication and data persistence through PostgreSQL. The software is also containerized using Docker, making it easy to deploy and run locally or in a cloud environment.
+This version introduces user management and editable routines, allowing users to create and manage their workout, as described in the System Overview. The mobile app and web app are now fully functional, with user authentication and data persistence through PostgreSQL. The software is also containerized using Docker, making it easy to deploy and run locally or in a cloud environment.
 
 ### Version 2: Live Data & Real-Time Updates
 This stage is still in the idea phase.
@@ -52,6 +53,30 @@ This version enhances the system with live data updates and real-time synchroniz
 
 ## Getting Started
 
+## Mobile
+To run the mobile app, follow these steps:
+1. Ensure you have [Flutter](https://docs.flutter.dev/get-started/install) and [Firebase](https://firebase.google.com/docs/flutter/setup) installed and set up on your machine.
+2. Clone the repository:
+3. Navigate to the `mobile` directory:
+4. Login to Firebase:
+   ```bash
+   firebase login
+   ```
+5. Install flutterfire CLI:
+    ```bash
+    dart pub global activate flutterfire_cli
+    ```
+6. Configure Firebase for the project:
+    ```bash
+    flutterfire configure
+    ```
+7. Connect your device or start an emulator.
+8. Run the app:
+   ```bash
+   flutter run
+   ```
+
+## Web
 *Instructions for running locally, development, and deployment coming soon.*
 
 ## Branching Strategy
