@@ -57,21 +57,21 @@ This version enhances the system with live data updates and real-time synchroniz
 To run the mobile app, follow these steps:
 1. Ensure you have [Flutter](https://docs.flutter.dev/get-started/install) and [Firebase](https://firebase.google.com/docs/flutter/setup) installed and set up on your machine.
 2. Clone the repository:
-3. Connect your device or start an emulator.
-4. Navigate to the `mobile` directory:
-5. Login to Firebase:
+3. Navigate to the `mobile` directory:
+4. Login to Firebase:
    ```bash
    firebase login
    ```
-6. Install flutterfire CLI:
+5. Install flutterfire CLI:
     ```bash
     dart pub global activate flutterfire_cli
     ```
-7. Configure Firebase for the project:
+6. Configure Firebase for the project:
     ```bash
     flutterfire configure
     ```
-5. Run the app:
+7. Connect your device or start an emulator.
+8. Run the app:
    ```bash
    flutter run
    ```

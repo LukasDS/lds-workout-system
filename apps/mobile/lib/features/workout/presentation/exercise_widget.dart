@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:workout/models/exercise_info.dart';
-import 'package:workout/repositories/workout_repository.dart';
-import 'package:workout/utils/debouncer.dart';
+import 'package:workout/features/workout/domain/exercise_info.dart';
+import 'package:workout/features/workout/data/workout_repository.dart';
+import 'package:workout/core/utils/debouncer.dart';
 
 /// A widget representing an exercise with a name and a weight input field.
-class Exercise extends StatefulWidget {
+class ExerciseWidget extends StatefulWidget {
   final ExerciseInfo exerciseInfo;
 
-  const Exercise({super.key, required this.exerciseInfo});
+  const ExerciseWidget({super.key, required this.exerciseInfo});
 
   @override
-  State<Exercise> createState() => _ExerciseState();
+  State<ExerciseWidget> createState() => _ExerciseWidgetState();
 }
 
 /// The state for the Exercise widget, managing the weight input and interactions with the workout repository.
-class _ExerciseState extends State<Exercise> {
+class _ExerciseWidgetState extends State<ExerciseWidget> {
   WorkoutRepository get workoutRepository => Provider.of<WorkoutRepository>(context, listen: false);
   double? _weight;
   late TextEditingController _weightController;

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:workout/models/exercise_info.dart';
-import 'package:workout/widgets/workout_split.dart';
+import 'package:workout/features/workout/domain/exercise_info.dart';
+import 'package:workout/features/workout/presentation/workout_split_widget.dart';
 
 void main() {
   setUpAll(() => registerFallbackValue(DateTime.now()));
 
   testWidgets('WorkoutSplit shows title and exercises', (tester) async {
     await tester.pumpWidget(MaterialApp(
-      home: WorkoutSplit(
+      home: WorkoutSplitWidget(
         title: 'Legs',
         exercises: [
           ExerciseInfo(

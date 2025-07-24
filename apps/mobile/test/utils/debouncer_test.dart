@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:workout/utils/debouncer.dart';
+import 'package:workout/core/utils/debouncer.dart';
 
 void main() {
   test('Debouncer calls action after delay', () async {

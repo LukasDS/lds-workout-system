@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:workout/repositories/workout_repository.dart';
+import 'package:workout/features/workout/data/workout_repository.dart';
 
 /// A repository for managing workout exercises using Firebase Firestore.
 ///

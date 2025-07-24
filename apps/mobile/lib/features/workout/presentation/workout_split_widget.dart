@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:workout/models/exercise_info.dart';
-import 'package:workout/widgets/exercise.dart';
+import 'package:workout/features/workout/domain/exercise_info.dart';
+import 'package:workout/features/workout/presentation/exercise_widget.dart';
 
 /// A widget representing a workout split, containing multiple exercises.
 /// It displays a title and a list of exercises, each with optional special warmup information.
 ///
-class WorkoutSplit extends StatelessWidget {
+class WorkoutSplitWidget extends StatelessWidget {
   final String title;
   final List<ExerciseInfo> exercises;
 
-  const WorkoutSplit({
+  const WorkoutSplitWidget({
     super.key,
     required this.title,
     required this.exercises
@@ -29,7 +29,7 @@ class WorkoutSplit extends StatelessWidget {
         child: Column(
           children: List.generate(
             exercises.length,
-            (index) => Exercise(
+            (index) => ExerciseWidget(
               exerciseInfo: exercises[index]
             ),
           ),

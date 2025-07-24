@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:workout/models/exercise_info.dart';
+import 'package:workout/features/workout/domain/exercise_info.dart';
 
 void main() {
   test('ExerciseInfo constructs and warmupInfo is callable', () {

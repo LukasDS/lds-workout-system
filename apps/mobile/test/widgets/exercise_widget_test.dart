@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
-import 'package:workout/models/exercise_info.dart';
-import 'package:workout/repositories/workout_repository.dart';
-import 'package:workout/widgets/exercise.dart';
+import 'package:workout/features/workout/domain/exercise_info.dart';
+import 'package:workout/features/workout/data/workout_repository.dart';
+import 'package:workout/features/workout/presentation/exercise_widget.dart';
 
 class MockWorkoutRepository extends Mock implements WorkoutRepository {}
 
@@ -25,7 +25,7 @@ void main() {
       Provider<WorkoutRepository>.value(
         value: mockRepository,
         child: MaterialApp(
-          home: Exercise(
+          home: ExerciseWidget(
             exerciseInfo: ExerciseInfo(
               name: 'Pushups',
               warmupInfo: dummyWarmup
@@ -45,7 +45,7 @@ void main() {
       Provider<WorkoutRepository>.value(
         value: mockRepository,
         child: MaterialApp(
-          home: Exercise(
+          home: ExerciseWidget(
             exerciseInfo: ExerciseInfo(
               name: 'Squats',
               warmupInfo: dummyWarmup

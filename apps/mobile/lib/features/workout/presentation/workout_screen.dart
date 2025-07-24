@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:workout/models/exercise_info.dart';
-import 'package:workout/storage/local_storage.dart';
-import 'package:workout/utils/warmup_utils.dart';
-import 'package:workout/widgets/workout_split.dart';
+import 'package:workout/features/workout/domain/exercise_info.dart';
+import 'package:workout/core/storage/local_storage.dart';
+import 'package:workout/core/utils/warmup_utils.dart';
+import 'package:workout/features/workout/presentation/workout_split_widget.dart';
 
 /// The main widget for the workout home screen, which contains a PageView for different workout splits.
-class WorkoutHome extends StatefulWidget {
-  const WorkoutHome({super.key});
+class WorkoutScreen extends StatefulWidget {
+  const WorkoutScreen({super.key});
 
   @override
-  State<WorkoutHome> createState() => _WorkoutHomeState();
+  State<WorkoutScreen> createState() => _WorkoutScreenState();
 }
 
-class _WorkoutHomeState extends State<WorkoutHome> {
+class _WorkoutScreenState extends State<WorkoutScreen> {
   LocalStorage get localStorage => Provider.of<LocalStorage>(context, listen: false);
   int _currentIndex = 0;
   final PageController _pageController = PageController();
@@ -56,7 +56,7 @@ class _WorkoutHomeState extends State<WorkoutHome> {
 
   List<Widget> _buildPages() {
     return [
-      const WorkoutSplit(
+      const WorkoutSplitWidget(
         title: 'Quads & abs',
         exercises: [
           ExerciseInfo(name: 'Squats', warmupInfo: getBarbellWarmupInfo),
@@ -65,7 +65,7 @@ class _WorkoutHomeState extends State<WorkoutHome> {
           ExerciseInfo(name: 'Russian twists', warmupInfo: getDefaultWarmupInfo)
         ],
       ),
-      const WorkoutSplit(
+      const WorkoutSplitWidget(
         title: 'Chest & back',
         exercises: [
           ExerciseInfo(name: 'Dumbbell press', warmupInfo: getDefaultWarmupInfo),
@@ -74,7 +74,7 @@ class _WorkoutHomeState extends State<WorkoutHome> {
           ExerciseInfo(name: 'Dumbbell pullovers', warmupInfo: getDefaultWarmupInfo)
         ],
       ),
-      const WorkoutSplit(
+      const WorkoutSplitWidget(
           title: 'Legs',
           exercises: [
             ExerciseInfo(name: 'Deadlift', warmupInfo: getBarbellWarmupInfo),
@@ -83,7 +83,7 @@ class _WorkoutHomeState extends State<WorkoutHome> {
             ExerciseInfo(name: 'Calf raises', warmupInfo: getDefaultWarmupInfo)
           ]
       ),
-      const WorkoutSplit(
+      const WorkoutSplitWidget(
         title: 'Shoulders & arms',
         exercises: [
           ExerciseInfo(name: 'Shoulder press', warmupInfo: getBarbellWarmupInfo),

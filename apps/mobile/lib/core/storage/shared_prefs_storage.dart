@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workout/storage/local_storage.dart';
+import 'package:workout/core/storage/local_storage.dart';
 
 /// A shared preferences implementation of the LocalStorage interface.
 class SharedPrefsStorage extends LocalStorage {
