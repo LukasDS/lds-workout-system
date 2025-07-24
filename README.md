@@ -3,6 +3,11 @@
 
 This project leverages a microservices architecture with **Flutter**, **Angular**, **Spring Boot**, and **PostgreSQL** for a robust, scalable solution.
 
+## Video Demonstrations
+
+### Mobile App
+https://github.com/user-attachments/assets/82d1cfd2-f3fa-4cc4-948e-5ea1a644c24a
+
 ## Features at a Glance
 
 - **Flexible workout routine builder** with warmup calculation suggestions
