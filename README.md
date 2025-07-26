@@ -15,7 +15,7 @@ https://github.com/user-attachments/assets/82d1cfd2-f3fa-4cc4-948e-5ea1a644c24a
 - **Smart warmup calculator** based on your working weights
 - **Visualize your performance** over time with dynamic graphs
 - **User authentication** (post-MVP)
-- **Modern cloud-native stack**: REST/gRPC APIs, containerized services, and Postgres-backed storage
+- **Modern cloud-native stack**: REST/gRPC APIs, message brokers, containerized services, and Postgres-backed storage
 
 ## System Overview
 
@@ -26,7 +26,8 @@ This project consists of several independent, containerized microservices:
 - **Angular Web App:** Responsive interface to create/edit routines, enter weights, and view progress. Uses Signals and Standalone Components for a modern Angular experience.
 - **Web API:** Frontend gateway for web app communication, relaying requests to backend services.
 - **Weight Service:** Logic for managing weight data.
-- **Weight History Service:** Stores and retrieves historical weight data for analysis.
+- **Weight Event Broker:** Asynchronous messaging service for weight updates.
+- **Weight History Service:** Stores historical weight data for analysis.
 - **Routine Service:** Manages creation, editing, and deletion of workout splits, routines and warmup info for exercises.
 - **User Service:** Handles authentication, authorization, and user account management.
 - **Communication:**  
@@ -43,7 +44,7 @@ This project consists of several independent, containerized microservices:
 - **Mobile App:** Hardcoded routine, but weights are editable, and warmup weights are displayed. Uses Cloud Firestore for data persistence.
 - **Web App:** User can view their weight progression.
 - **Web API:** Acts as an entry point for all web app client requests and distributes them among backend microservices.
-- **Weight Service:** Manages weights and warmup calculations. Uses Cloud Firestore for data retrieval.
+- **Weight History Service:** Manages weights history. Uses Cloud Firestore for data retrieval.
 
 For this stage, the system is designed to be simple and functional, focusing on core features without user management or advanced data handling. While the mobile app is functional, the rest still only locally and is not deployed.
 
@@ -81,8 +82,34 @@ To run the mobile app, follow these steps:
    flutter run
    ```
 
-## Web
-*Instructions for running locally, development, and deployment coming soon.*
+## Web & Microservices
+To run the web app and microservices locally, follow these steps:
+1. Ensure you have [Node.js](https://nodejs.org/), [Angular CLI](https://angular.io/cli), [Java 21](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html), and [Spring Boot](https://spring.io/projects/spring-boot) installed.
+2. Clone the repository:
+   ```bash
+   git clone
+   ```
+3. Go to the Firebase Console
+4. Create a new project or use an existing one.
+5. Navigate to Project Settings > Service accounts.
+6. Generate a new private key and download the JSON file.
+7. Place this file in the `apps/weight-history-service/src/main/resources` directory as `serviceAccountKey.json`.
+8. Replace the `workout-68651` firebase project ID in `apps/weight-history-service/src/main/resources/application.properties` with your Firebase project ID.
+3. Run the Microservices:
+   - Navigate to the `apps/weight-history-service` directory and run:
+     ```bash
+     ./mvnw spring-boot:run
+     ```
+   - Navigate to the `apps/web-api` directory and run:
+     ```bash
+     ./mvnw spring-boot:run
+     ```
+4. Run the Angular application:
+   - Navigate to the `apps/web` directory and run:
+     ```bash
+     npm install
+     ng serve
+     ```
 
 ## Branching Strategy
 
