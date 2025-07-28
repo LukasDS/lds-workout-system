@@ -40,23 +40,18 @@ public class WeightHistoryGrpcClient {
     var request = GetWeightHistoriesRequest.newBuilder().build();
     GetWeightHistoriesResponse response = stub.getWeightHistories(request);
 
-    var weightHistoryModels = new ArrayList<WeightHistoryModel>();
-    for (WeightHistory weightHistory : response.getWeightHistoriesList()) {
-      var weightHistoryEntryModels = new ArrayList<WeightHistoryEntryModel>();
-      for (WeightHistoryEntry weightHistoryEntry : weightHistory.getEntriesList()) {
-        Instant instant = Instant.ofEpochSecond(
-          weightHistoryEntry.getTimestamp().getSeconds(),
-          weightHistoryEntry.getTimestamp().getNanos()
-        );
-        var timestamp = Date.from(instant);
-
-        var weightHistoryEntryModel = new WeightHistoryEntryModel(weightHistoryEntry.getValue(), timestamp);
-        weightHistoryEntryModels.add(weightHistoryEntryModel);
-      }
-
-      var weightHistoryModel = new WeightHistoryModel(weightHistory.getWeightName(), weightHistoryEntryModels);
-      weightHistoryModels.add(weightHistoryModel);
-    }
+    List<WeightHistoryModel> weightHistoryModels = response.getWeightHistoriesList()
+      .stream().map(weightHistory -> {
+        List<WeightHistoryEntryModel> entries = weightHistory.getEntriesList().stream().map(entry -> {
+          var instant = Instant.ofEpochSecond(
+            entry.getTimestamp().getSeconds(),
+            entry.getTimestamp().getNanos()
+          );
+          var timestamp = Date.from(instant);
+          return new WeightHistoryEntryModel(entry.getValue(), timestamp);
+      }).toList();
+      return new WeightHistoryModel(weightHistory.getWeightName(), entries);
+    }).toList();
 
     channel.shutdown();
 
