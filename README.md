@@ -8,6 +8,9 @@ This project leverages a microservices architecture with **Flutter**, **Angular*
 ### Mobile App
 https://github.com/user-attachments/assets/82d1cfd2-f3fa-4cc4-948e-5ea1a644c24a
 
+### Web App
+https://github.com/user-attachments/assets/334a8fad-c03c-4f88-8382-3007964d2845
+
 ## Features at a Glance
 
 - **Flexible workout routine builder** with warmup calculation suggestions
