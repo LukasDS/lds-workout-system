@@ -1,8 +1,1 @@
-@for (weightHistory of weightHistories; track $index) {
-  <p>{{ weightHistory.weightName }}</p>
-  <ul>
-    @for (weightEntry of weightHistory.entries; track $index) {
-      <li>Weight: {{ weightEntry.value }}, Date: {{ weightEntry.timestamp }}</li>
-    }
-  </ul>
-}
+<app-timeline-chart [weightHistories]="weightHistories"></app-timeline-chart>
