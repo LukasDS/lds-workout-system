@@ -4,7 +4,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -18,8 +20,9 @@ public class WeightHistoryController {
     this.weightHistoryService = weightHistoryService;
   }
   
+  @Async
   @GetMapping("")
-  public List<WeightHistoryModel> getWeightHistories() {
+  public CompletableFuture<List<WeightHistoryModel>> getWeightHistories() {
     return weightHistoryService.getWeightHistories();
   }
 }
