@@ -3,8 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "copy-assets": "shx cp ../../assets/images/workout-icon.png ./public/workout-icon.png",
+    "prestart": "npm run copy-assets",
     "start": "ng serve",
+    "prebuild": "npm run copy-assets",
     "build": "ng build",
+    "prewatch": "npm run copy-assets",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:web": "node dist/web/server/server.mjs"
@@ -49,6 +53,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "shx": "^0.4.0",
     "typescript": "~5.8.2"
   }
 }

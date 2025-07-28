@@ -108,7 +108,7 @@ To run the web app and microservices locally, follow these steps:
    - Navigate to the `apps/web` directory and run:
      ```bash
      npm install
-     ng serve
+     npm start
      ```
 
 ## Branching Strategy
