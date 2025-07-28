@@ -9,7 +9,7 @@ This project leverages a microservices architecture with **Flutter**, **Angular*
 https://github.com/user-attachments/assets/82d1cfd2-f3fa-4cc4-948e-5ea1a644c24a
 
 ### Web App
-https://github.com/user-attachments/assets/80378fe8-7442-4229-b203-048acccef0bc
+[web-ui-demo.webm](https://github.com/user-attachments/assets/60f6f129-e28d-4001-99a6-108d230cbf4f)
 
 ## Features at a Glance
 
