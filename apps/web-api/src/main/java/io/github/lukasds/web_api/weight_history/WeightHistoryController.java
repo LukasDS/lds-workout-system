@@ -5,9 +5,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/weight-history")
 public class WeightHistoryController {
@@ -16,7 +17,7 @@ public class WeightHistoryController {
   public WeightHistoryController(WeightHistoryService weightHistoryService) {
     this.weightHistoryService = weightHistoryService;
   }
-
+  
   @GetMapping("")
   public List<WeightHistoryModel> getWeightHistories() {
     return weightHistoryService.getWeightHistories();

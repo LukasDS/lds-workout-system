@@ -7,10 +7,27 @@ import { WeightHistory } from '../weight-history';
   templateUrl: './timeline-chart.html',
   styleUrl: './timeline-chart.scss'
 })
-export class TimelineChart implements AfterViewInit, OnChanges, OnDestroy {
+export class TimelineChart implements OnChanges, OnDestroy {
   @Input() weightHistories: WeightHistory[] = [];
-  @ViewChild('plot', { static: true }) plotEl!: ElementRef<HTMLDivElement>;
-  private isPlotlyInitialized = false;
+
+  private _plotEl?: ElementRef<HTMLDivElement>;
+
+  @ViewChild('plot', { static: false }) set plotElSetter(el: ElementRef<HTMLDivElement> | undefined) {
+    this._plotEl = el;
+    this.tryRenderPlot();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['weightHistories'] && this.weightHistories.length > 0) {
+      this.tryRenderPlot();
+    }
+  }
+
+  private async tryRenderPlot(): Promise<void> {
+    if (this._plotEl && this.weightHistories?.length > 0) {
+      await this.renderPlot();
+    }
+  }
 
   private getPlotlyTraces(weightHistories: WeightHistory[]): Partial<Plotly.PlotData>[] {
     return weightHistories.map((history, index) => {
@@ -21,7 +38,7 @@ export class TimelineChart implements AfterViewInit, OnChanges, OnDestroy {
         type: 'scatter',
         mode: 'lines+markers',
         name: history.weightName,
-        x: sortedEntries.map(entry => entry.timestamp.toISOString()),
+        x: sortedEntries.map(entry => entry.timestamp),
         y: sortedEntries.map(entry => entry.value),
         line: { shape: 'hv' },
         visible: index === 0 ? true : 'legendonly',
@@ -34,8 +51,8 @@ export class TimelineChart implements AfterViewInit, OnChanges, OnDestroy {
 
   private async renderPlot(): Promise<void> {
     const traces = this.getPlotlyTraces(this.weightHistories);
-    const Plotly = (await import('plotly.js-dist-min')).default;
-    Plotly.newPlot(this.plotEl.nativeElement, traces, {
+    const Plotly = await import('plotly.js-dist-min');
+    Plotly.newPlot(this._plotEl!.nativeElement, traces, {
       title: { text: 'Weight Progression Chart' },
       autosize: true,
       xaxis: {
@@ -48,25 +65,10 @@ export class TimelineChart implements AfterViewInit, OnChanges, OnDestroy {
     }, { responsive: true });
   }
 
-  ngAfterViewInit(): void {
-    const isWindowLoadedAndNotSSR = typeof window !== 'undefined';
-    if (isWindowLoadedAndNotSSR) {
-      this.renderPlot();
-      this.isPlotlyInitialized = true;
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.isPlotlyInitialized && changes['weightHistories']) {
-      this.renderPlot();
-    }
-  }
-
   async ngOnDestroy(): Promise<void> {
-    const isWindowLoadedAndNotSSR = typeof window !== 'undefined';
-    if (isWindowLoadedAndNotSSR && this.plotEl) {
-      const Plotly = (await import('plotly.js-dist-min')).default;
-      Plotly.purge(this.plotEl.nativeElement);
+    if (typeof window !== 'undefined' && this._plotEl) {
+      const Plotly = await import('plotly.js-dist-min');
+      Plotly.purge(this._plotEl.nativeElement);
     }
   }
 }
