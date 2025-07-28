@@ -1,6 +1,7 @@
 {
   "name": "web",
   "version": "0.0.0",
+  "license": "GPL-3.0-only",
   "scripts": {
     "ng": "ng",
     "copy-assets": "shx cp ../../assets/images/workout-icon.png ./public/workout-icon.png",

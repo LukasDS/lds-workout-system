@@ -123,3 +123,20 @@ This repository follows the **[GitHub Flow](https://docs.github.com/en/get-start
 
 ## About
 This demonstration project is built and maintained by Lukas Daugaard Schröder. For questions or architectural discussions, please [contact me](https://www.linkedin.com/in/lukas-daugaard-schroeder).
+
+## Dependencies & Acknowledgments
+
+This monorepo uses open source dependencies in Flutter, Angular, and Java. 
+
+Dependency lists:
+- Flutter: see `pubspec.yaml` 
+- Angular: see `package.json`
+- Spring Boot (Java): see `build.gradle`
+
+You can generate a full tree of dependencies with the following commands:
+
+- **Flutter**: N/A (`pubspec.yaml` lists all direct dependencies)
+- **Angular**: `yarn licenses list --json` or `npx license-checker --summary`
+- **Spring Boot**: `./gradlew dependencies`
+
+For licensing details, refer to each technology’s documentation for generating third-party license reports.
