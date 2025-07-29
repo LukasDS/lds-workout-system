@@ -1,0 +1,60 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "ng": "ng",
+    "copy-assets": "shx cp ../../assets/images/workout-icon.png ./public/workout-icon.png",
+    "prestart": "npm run copy-assets",
+    "start": "ng serve",
+    "prebuild": "npm run copy-assets",
+    "build": "ng build",
+    "prewatch": "npm run copy-assets",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "serve:ssr:web": "node dist/web/server/server.mjs"
+  },
+  "prettier": {
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "^20.1.0",
+    "@angular/compiler": "^20.1.0",
+    "@angular/core": "^20.1.0",
+    "@angular/forms": "^20.1.0",
+    "@angular/platform-browser": "^20.1.0",
+    "@angular/platform-server": "^20.1.0",
+    "@angular/router": "^20.1.0",
+    "@angular/ssr": "^20.1.1",
+    "express": "^5.1.0",
+    "plotly.js-dist-min": "^3.0.3",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.15.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.1.1",
+    "@angular/cli": "^20.1.1",
+    "@angular/compiler-cli": "^20.1.0",
+    "@types/express": "^5.0.1",
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^20.17.19",
+    "@types/plotly.js-dist-min": "^2.3.4",
+    "jasmine-core": "~5.8.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "shx": "^0.4.0",
+    "typescript": "~5.8.2"
+  }
+}

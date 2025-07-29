@@ -34,11 +34,7 @@ flutter:
   # Enable generation of localized Strings from arb files.
   generate: true
 
-  assets:
-    # Add assets from the images directory to the application.
-    - assets/images/
-
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/workout_icon.png"
+  image_path: "../../assets/images/workout-icon.png"

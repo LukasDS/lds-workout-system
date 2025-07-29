@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package weight_history_service;
+
+import "google/protobuf/timestamp.proto";
+
+message WeightHistoryEntry {
+  double value = 1;
+  google.protobuf.Timestamp timestamp = 2; 
+}
+
+message WeightHistory {
+  string weight_name = 1;
+  repeated WeightHistoryEntry entries = 2;
+}
+
+message GetWeightHistoriesRequest {
+}
+
+message GetWeightHistoriesResponse {
+  repeated WeightHistory weight_histories = 1;
+}
+
+service WeightHistoryService {
+  rpc GetWeightHistories(GetWeightHistoriesRequest) returns(GetWeightHistoriesResponse);
+}
