@@ -53,7 +53,7 @@ String getBarbellWarmupInfo(double? weight) =>
 String getEzBarWarmupInfo(double? weight) =>
     getGenericBarbellWarmupInfo(weight, 7.5);
 
-String getDipsWarmupInfo(double? weight) =>
+String getWeightedDipsWarmupInfo(double? weight) =>
     '12 D press,  18 Tricep ext,  0 Dips'; // Until 20 kg is reached, then normal warmup
 
 String getPullUpsDynamicStretchingInfo(double? weight) =>
