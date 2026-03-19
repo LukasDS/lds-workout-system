@@ -4,6 +4,4 @@ class ExerciseInfo {
   final String Function(double?) warmupInfo;
 
   const ExerciseInfo({required this.name, required this.warmupInfo, this.requiresWeight = true});
-
-  const ExerciseInfo({required this.name, required this.warmupInfo});
 }
