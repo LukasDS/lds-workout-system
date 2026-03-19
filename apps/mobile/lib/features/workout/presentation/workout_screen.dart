@@ -59,7 +59,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       const WorkoutSplitWidget(
         title: 'Quads & abs',
         exercises: [
-          ExerciseInfo(name: 'Single Legged Leg Press', warmupInfo: getBarbellWarmupInfo),
+          ExerciseInfo(name: 'Single Legged Leg Press', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Single Legged Leg Extensions', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Adductor', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Russian twists', warmupInfo: getDefaultWarmupInfo)
@@ -86,11 +86,11 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       const WorkoutSplitWidget(
         title: 'Shoulders & arms',
         exercises: [
-          ExerciseInfo(name: 'Seated Dumbbell Shoulder Press', warmupInfo: getBarbellWarmupInfo),
+          ExerciseInfo(name: 'Seated Dumbbell Shoulder Press', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Lateral raises', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Aperture L', warmupInfo: getApertureLWarmupInfo),
           ExerciseInfo(name: 'Bicep curls', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Dips', warmupInfo: getEzBarWarmupInfo)
+          ExerciseInfo(name: 'Dips', warmupInfo: getDefaultWarmupInfo)
         ]
       )
     ];
