@@ -62,23 +62,23 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           ExerciseInfo(name: 'Single Legged Leg Press', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Single Legged Leg Extensions', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Adductor', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Russian twists', warmupInfo: getDefaultWarmupInfo)
+          ExerciseInfo(name: 'Russian Twists', warmupInfo: getDefaultWarmupInfo)
         ],
       ),
       const WorkoutSplitWidget(
         title: 'Chest & back',
         exercises: [
-          ExerciseInfo(name: 'Dumbbell press', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Incline dumbbell flies', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Pull-ups', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Dumbbell pullovers', warmupInfo: getDefaultWarmupInfo)
+          ExerciseInfo(name: 'Dumbbell Press', warmupInfo: getDefaultWarmupInfo),
+          ExerciseInfo(name: 'Incline Dumbbell Flies', warmupInfo: getDefaultWarmupInfo),
+          ExerciseInfo(name: 'Pull-Ups', warmupInfo: getDefaultWarmupInfo),
+          ExerciseInfo(name: 'Dumbbell Pullovers', warmupInfo: getDefaultWarmupInfo)
         ],
       ),
       const WorkoutSplitWidget(
           title: 'Legs',
           exercises: [
             ExerciseInfo(name: 'Deadlift', warmupInfo: getBarbellWarmupInfo),
-            ExerciseInfo(name: 'Leg curls', warmupInfo: getDefaultWarmupInfo),
+            ExerciseInfo(name: 'Leg Curls', warmupInfo: getDefaultWarmupInfo),
             ExerciseInfo(name: 'Abductor', warmupInfo: getDefaultWarmupInfo),
             ExerciseInfo(name: 'Single Legged Leg Press Calf Raises', warmupInfo: getDefaultWarmupInfo)
           ]
@@ -87,9 +87,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         title: 'Shoulders & arms',
         exercises: [
           ExerciseInfo(name: 'Seated Dumbbell Shoulder Press', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Lateral raises', warmupInfo: getDefaultWarmupInfo),
+          ExerciseInfo(name: 'Lateral Raises', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Aperture L', warmupInfo: getApertureLWarmupInfo),
-          ExerciseInfo(name: 'Bicep curls', warmupInfo: getDefaultWarmupInfo),
+          ExerciseInfo(name: 'Bicep Curls', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Dips', warmupInfo: getDefaultWarmupInfo)
         ]
       )
