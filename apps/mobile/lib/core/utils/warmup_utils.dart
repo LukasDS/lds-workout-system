@@ -56,5 +56,11 @@ String getEzBarWarmupInfo(double? weight) =>
 String getDipsWarmupInfo(double? weight) =>
     '12 D press,  18 Tricep ext,  0 Dips'; // Until 20 kg is reached, then normal warmup
 
+String getPullUpsDynamicStretchingInfo(double? weight) =>
+    'Arm circles: 10 reps each direction, Scapular pull-ups: 10 reps';
+
+String getDipsDynamicStretchingInfo(double? weight) =>
+    'Arm circles: 10 reps each direction, Tricep extensions: 10 reps';
+
 String getApertureLWarmupInfo(double? weight) =>
     weight == null ? '' : '${weight * 0.5}';
