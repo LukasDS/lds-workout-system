@@ -59,17 +59,17 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       const WorkoutSplitWidget(
         title: 'Quads & abs',
         exercises: [
-          ExerciseInfo(name: 'Single Legged Leg Press', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Single Legged Leg Extensions', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Adductor', warmupInfo: getDefaultWarmupInfo),
+          ExerciseInfo(name: 'Single-Leg Leg Press', warmupInfo: getDefaultWarmupInfo),
+          ExerciseInfo(name: 'Single-Leg Leg Extensions', warmupInfo: getDefaultWarmupInfo),
+          ExerciseInfo(name: 'Adductor Machine', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Russian Twists', warmupInfo: getDefaultWarmupInfo)
         ],
       ),
       const WorkoutSplitWidget(
         title: 'Chest & back',
         exercises: [
-          ExerciseInfo(name: 'Dumbbell Press', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Incline Dumbbell Flies', warmupInfo: getDefaultWarmupInfo),
+          ExerciseInfo(name: 'Flat Dumbbell Press', warmupInfo: getDefaultWarmupInfo),
+          ExerciseInfo(name: 'Incline Dumbbell Flyes', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Pull-Ups', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Dumbbell Pullovers', warmupInfo: getDefaultWarmupInfo)
         ],
@@ -77,20 +77,20 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       const WorkoutSplitWidget(
           title: 'Legs',
           exercises: [
-            ExerciseInfo(name: 'Deadlift', warmupInfo: getBarbellWarmupInfo),
+            ExerciseInfo(name: 'Barbell Deadlift', warmupInfo: getBarbellWarmupInfo),
             ExerciseInfo(name: 'Leg Curls', warmupInfo: getDefaultWarmupInfo),
-            ExerciseInfo(name: 'Abductor', warmupInfo: getDefaultWarmupInfo),
-            ExerciseInfo(name: 'Single Legged Leg Press Calf Raises', warmupInfo: getDefaultWarmupInfo)
+            ExerciseInfo(name: 'Abductor Machine', warmupInfo: getDefaultWarmupInfo),
+            ExerciseInfo(name: 'Single-Leg Leg Press Calf Raises', warmupInfo: getDefaultWarmupInfo)
           ]
       ),
       const WorkoutSplitWidget(
         title: 'Shoulders & arms',
         exercises: [
           ExerciseInfo(name: 'Seated Dumbbell Shoulder Press', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Lateral Raises', warmupInfo: getDefaultWarmupInfo),
+          ExerciseInfo(name: 'Lateral Dumbbell Raises', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Aperture L', warmupInfo: getApertureLWarmupInfo),
           ExerciseInfo(name: 'Bicep Curls', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Dips', warmupInfo: getDefaultWarmupInfo)
+          ExerciseInfo(name: 'Parallel Bar Dips', warmupInfo: getDefaultWarmupInfo)
         ]
       )
     ];
