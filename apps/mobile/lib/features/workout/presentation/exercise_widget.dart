@@ -91,26 +91,29 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Column(children: [
               Text(widget.exerciseInfo.name, style: const TextStyle(fontSize: 20)),
-              TextField(
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                    signed: false,
-                  ),
-                  textAlign: TextAlign.center,
-                  decoration:
-                      const InputDecoration(border: OutlineInputBorder()),
-                  controller: _weightController,
-                  onChanged: (weight) {
-                    setState(() {
-                      _weight = double.tryParse(weight);
-                    });
+              if (widget.exerciseInfo.requiresWeight)
+                TextField(
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                      signed: false,
+                    ),
+                    textAlign: TextAlign.center,
+                    decoration:
+                        const InputDecoration(border: OutlineInputBorder()),
+                    controller: _weightController,
+                    onChanged: (weight) {
+                      setState(() {
+                        _weight = double.tryParse(weight);
+                      });
 
-                    _debouncer.run(() => _saveWeight(_weight));
-                  },
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r"^[0-9]*\.?[0-9]*$")),
-                  ]),
+                      _debouncer.run(() => _saveWeight(_weight));
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r"^[0-9]*\.?[0-9]*$")),
+                    ]),
+              if (!widget.exerciseInfo.requiresWeight)
+                const Text('No weight required for this exercise.'),
               const SizedBox(height: 2),
               Text(warmupInfo()),
             ])));
