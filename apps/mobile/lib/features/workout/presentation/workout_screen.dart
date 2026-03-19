@@ -57,7 +57,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   List<Widget> _buildPages() {
     return [
       const WorkoutSplitWidget(
-        title: 'Quads & abs',
+        title: 'Quads and Abs',
         exercises: [
           ExerciseInfo(name: 'Single-Leg Leg Press', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Single-Leg Leg Extensions', warmupInfo: getDefaultWarmupInfo),
@@ -66,7 +66,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         ],
       ),
       const WorkoutSplitWidget(
-        title: 'Chest & back',
+        title: 'Chest and Back',
         exercises: [
           ExerciseInfo(name: 'Flat Dumbbell Press', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Incline Dumbbell Flyes', warmupInfo: getDefaultWarmupInfo),
@@ -84,7 +84,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           ]
       ),
       const WorkoutSplitWidget(
-        title: 'Shoulders & arms',
+        title: 'Shoulders and Arms',
         exercises: [
           ExerciseInfo(name: 'Seated Dumbbell Shoulder Press', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Lateral Dumbbell Raises', warmupInfo: getDefaultWarmupInfo),
@@ -109,20 +109,24 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         onDestinationSelected: _onDestinationSelected,
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.fitness_center),
-            label: 'Quads & abs',
+            icon: Icon(Icons.directions_run_outlined),
+            selectedIcon: Icon(Icons.directions_run),
+            label: 'Quads',
           ),
           NavigationDestination(
-            icon: Icon(Icons.fitness_center),
-            label: 'Chest & back',
+            icon: Icon(Icons.compare_arrows_outlined),
+            selectedIcon: Icon(Icons.compare_arrows),
+            label: 'Chest/Back',
           ),
           NavigationDestination(
-            icon: Icon(Icons.fitness_center),
+            icon: Icon(Icons.hiking_outlined),
+            selectedIcon: Icon(Icons.hiking),
             label: 'Legs',
           ),
           NavigationDestination(
-            icon: Icon(Icons.fitness_center),
-            label: 'Shoul... & arms',
+            icon: Icon(Icons.accessibility_new_outlined),
+            selectedIcon: Icon(Icons.accessibility_new),
+            label: 'Shoulders',
           ),
         ],
       ),

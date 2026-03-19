@@ -17,7 +17,8 @@ class ExerciseWidget extends StatefulWidget {
 
 /// The state for the Exercise widget, managing the weight input and interactions with the workout repository.
 class _ExerciseWidgetState extends State<ExerciseWidget> {
-  WorkoutRepository get workoutRepository => Provider.of<WorkoutRepository>(context, listen: false);
+  WorkoutRepository get workoutRepository =>
+      Provider.of<WorkoutRepository>(context, listen: false);
   double? _weight;
   late TextEditingController _weightController;
   final Debouncer _debouncer = Debouncer(milliseconds: 1000);
@@ -41,7 +42,8 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
 
   Future<void> _loadData() async {
     try {
-      final weight = await workoutRepository.getCurrentWeight(widget.exerciseInfo.name);
+      final weight =
+          await workoutRepository.getCurrentWeight(widget.exerciseInfo.name);
       setState(() {
         _weight = weight;
         _weightController.text = formatWeight(_weight);
@@ -50,21 +52,20 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
       debugPrint('Failed to load data: $e\n$stack');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to load weight.'))
-        );
+            const SnackBar(content: Text('Failed to load weight.')));
       }
     }
   }
 
   Future<void> _saveWeight(double? weight) async {
     try {
-      await workoutRepository.setCurrentWeight(widget.exerciseInfo.name, weight);
+      await workoutRepository.setCurrentWeight(
+          widget.exerciseInfo.name, weight);
     } catch (e, stack) {
       debugPrint('Failed to save weight: $e\n$stack');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to save weight.'))
-        );
+            const SnackBar(content: Text('Failed to save weight.')));
       }
     }
   }
@@ -86,43 +87,46 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Container(
-            width: 250,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Column(children: [
-              Text(widget.exerciseInfo.name, style: const TextStyle(fontSize: 20)),
-              if (widget.exerciseInfo.requiresWeight)
-                TextField(
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                      signed: false,
-                    ),
-                    textAlign: TextAlign.center,
-                    decoration:
-                        const InputDecoration(border: OutlineInputBorder()),
-                    controller: _weightController,
-                    onChanged: (weight) {
-                      setState(() {
-                        _weight = double.tryParse(weight);
-                      });
+        child: Column(children: [
+      Text(widget.exerciseInfo.name, style: const TextStyle(fontSize: 20)),
+      Container(
+          width: 250,
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Column(children: [
+            if (widget.exerciseInfo.requiresWeight)
+              TextField(
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                    signed: false,
+                  ),
+                  textAlign: TextAlign.center,
+                  decoration:
+                      const InputDecoration(border: OutlineInputBorder()),
+                  controller: _weightController,
+                  onChanged: (weight) {
+                    setState(() {
+                      _weight = double.tryParse(weight);
+                    });
 
-                      _debouncer.run(() => _saveWeight(_weight));
-                    },
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(
-                          RegExp(r"^[0-9]*\.?[0-9]*$")),
-                    ]),
-              if (!widget.exerciseInfo.requiresWeight)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.fitness_center, color: Colors.grey),
-                    SizedBox(width: 8),
-                    Text('No weight required', style: TextStyle(color: Colors.grey)),
-                  ],
-                ),
-              const SizedBox(height: 2),
-              Text(warmupInfo()),
-            ])));
+                    _debouncer.run(() => _saveWeight(_weight));
+                  },
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r"^[0-9]*\.?[0-9]*$")),
+                  ]),
+            if (!widget.exerciseInfo.requiresWeight)
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.fitness_center, color: Colors.grey),
+                  SizedBox(width: 8),
+                  Text('No weight required',
+                      style: TextStyle(color: Colors.grey)),
+                ],
+              ),
+            const SizedBox(height: 2),
+            Text(warmupInfo()),
+          ]))
+    ]));
   }
 }
