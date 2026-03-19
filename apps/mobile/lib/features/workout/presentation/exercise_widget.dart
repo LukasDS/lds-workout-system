@@ -113,7 +113,14 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
                           RegExp(r"^[0-9]*\.?[0-9]*$")),
                     ]),
               if (!widget.exerciseInfo.requiresWeight)
-                const Text('No weight required for this exercise.'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.fitness_center, color: Colors.grey),
+                    SizedBox(width: 8),
+                    Text('No weight required', style: TextStyle(color: Colors.grey)),
+                  ],
+                ),
               const SizedBox(height: 2),
               Text(warmupInfo()),
             ])));
