@@ -76,12 +76,6 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
     return weight % 1 == 0 ? weight.toInt().toString() : weight.toString();
   }
 
-  /// Returns the warmup information based on the current weight.
-  String warmupInfo() {
-    if (_weight == null) return '';
-    return widget.exerciseInfo.warmupInfo(_weight!);
-  }
-
   /// Builds the widget tree for the Exercise widget.
   /// Displays the exercise name, a text field for weight input, and warmup information.
   @override
@@ -91,7 +85,6 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
       Text(widget.exerciseInfo.name, style: const TextStyle(fontSize: 20)),
       Container(
           width: 250,
-          padding: const EdgeInsets.symmetric(vertical: 10),
           child: Column(children: [
             if (widget.exerciseInfo.requiresWeight)
               TextField(
@@ -114,18 +107,12 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
                     FilteringTextInputFormatter.allow(
                         RegExp(r"^[0-9]*\.?[0-9]*$")),
                   ]),
-            if (!widget.exerciseInfo.requiresWeight)
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.fitness_center, color: Colors.grey),
-                  SizedBox(width: 8),
-                  Text('No weight required',
-                      style: TextStyle(color: Colors.grey)),
-                ],
-              ),
             const SizedBox(height: 2),
-            Text(warmupInfo()),
+            Text(
+              widget.exerciseInfo.warmupInfo(_weight),
+              textAlign: TextAlign.center,
+              ),
+            const SizedBox(height: 16)
           ]))
     ]));
   }

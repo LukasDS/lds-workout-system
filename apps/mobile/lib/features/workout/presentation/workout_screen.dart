@@ -70,7 +70,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         exercises: [
           ExerciseInfo(name: 'Flat Dumbbell Press', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Incline Dumbbell Flyes', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Pull-Ups', warmupInfo: getPullUpsDynamicStretchingInfo),
+          ExerciseInfo(name: 'Pull-Ups', warmupInfo: getPullUpsDynamicStretchingInfo, requiresWeight: false),
           ExerciseInfo(name: 'Dumbbell Pullovers', warmupInfo: getDefaultWarmupInfo)
         ],
       ),
@@ -90,7 +90,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           ExerciseInfo(name: 'Lateral Dumbbell Raises', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Aperture L', warmupInfo: getApertureLWarmupInfo),
           ExerciseInfo(name: 'Bicep Curls', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Parallel Bar Dips', warmupInfo: getDipsDynamicStretchingInfo)
+          ExerciseInfo(name: 'Parallel Bar Dips', warmupInfo: getDipsDynamicStretchingInfo, requiresWeight: false)
         ]
       )
     ];
