@@ -62,7 +62,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           ExerciseInfo(name: 'Single-Leg Leg Press', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Single-Leg Leg Extensions', warmupInfo: getDefaultWarmupInfo),
           ExerciseInfo(name: 'Adductor Machine', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Russian Twists', warmupInfo: getDefaultWarmupInfo)
+          ExerciseInfo(name: 'Hollow Body Hold', requiresWeight: false)
         ],
       ),
       const WorkoutSplitWidget(

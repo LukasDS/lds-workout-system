@@ -58,4 +58,25 @@ void main() {
     await tester.enterText(find.byType(TextField), '42');
     expect(find.text('Warmup for 42'), findsOneWidget);
   });
+
+  testWidgets('Does not render weight input when requiresWeight is false', (tester) async {
+    await tester.pumpWidget(
+      Provider<WorkoutRepository>.value(
+        value: mockRepository,
+        child: MaterialApp(
+          home: Scaffold(
+            body: ExerciseWidget(
+              exerciseInfo: const ExerciseInfo(
+                name: 'Hollow Body Hold',
+                requiresWeight: false
+              ),
+            ),
+          )
+        )
+      )
+    );
+
+    expect(find.text('Hollow Body Hold'), findsOneWidget);
+    expect(find.byType(TextField), findsNothing);
+  });
 }

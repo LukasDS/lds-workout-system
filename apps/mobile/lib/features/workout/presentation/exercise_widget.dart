@@ -108,10 +108,11 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
                         RegExp(r"^[0-9]*\.?[0-9]*$")),
                   ]),
             const SizedBox(height: 2),
-            Text(
-              widget.exerciseInfo.warmupInfo(_weight),
-              textAlign: TextAlign.center,
-              ),
+            if (widget.exerciseInfo.warmupInfo != null)
+              Text(
+                widget.exerciseInfo.warmupInfo!(_weight),
+                textAlign: TextAlign.center,
+                ),
             const SizedBox(height: 16)
           ]))
     ]));
