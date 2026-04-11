@@ -16,7 +16,8 @@ class WorkoutScreen extends StatefulWidget {
 class _WorkoutScreenState extends State<WorkoutScreen> {
   LocalStorage get localStorage => Provider.of<LocalStorage>(context, listen: false);
   int _currentIndex = 0;
-  final PageController _pageController = PageController();
+  final int _initialPageOffset = 4000;
+  late final PageController _pageController = PageController(initialPage: _initialPageOffset);
 
   @override
   void initState() {
@@ -35,20 +36,27 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     if (currentIndex == null) return;
     setState(() {
       _currentIndex = currentIndex;
-      _pageController.jumpToPage(_currentIndex);
+      _pageController.jumpToPage(_initialPageOffset + _currentIndex);
     });
   }
 
   void _onPageChanged(int index) async {
+    final pagesCount = _buildPages().length;
+    final realIndex = index % pagesCount;
     setState(() {
-      _currentIndex = index;
+      _currentIndex = realIndex;
     });
-    localStorage.setInt('currentIndex', index);
+    localStorage.setInt('currentIndex', realIndex);
   }
 
   void _onDestinationSelected(int index) {
+    final pagesCount = _buildPages().length;
+    int currentPage = _pageController.page?.round() ?? _initialPageOffset;
+    int currentRealIndex = currentPage % pagesCount;
+    int offset = index - currentRealIndex;
+    
     _pageController.animateToPage(
-      index,
+      currentPage + offset,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut
     );
@@ -99,10 +107,13 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
+      body: PageView.builder(
         controller: _pageController,
         onPageChanged: _onPageChanged,
-        children: _buildPages()
+        itemBuilder: (context, index) {
+          final pages = _buildPages();
+          return pages[index % pages.length];
+        },
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
