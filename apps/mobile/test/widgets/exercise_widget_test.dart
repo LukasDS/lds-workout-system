@@ -15,8 +15,8 @@ void main() {
   String dummyWarmup(double? w) => w == null ? '' : 'Warmup for $w';
 
   final mockRepository = MockWorkoutRepository();
-    when(() => mockRepository.getCurrentWeight(any()))
-        .thenAnswer((_) async => null);
+    when(() => mockRepository.watchCurrentWeight(any()))
+        .thenAnswer((_) => Stream.value(null));
     when(() => mockRepository.setCurrentWeight(any(), any()))
         .thenAnswer((_) async {});
 
@@ -25,10 +25,12 @@ void main() {
       Provider<WorkoutRepository>.value(
         value: mockRepository,
         child: MaterialApp(
-          home: ExerciseWidget(
-            exerciseInfo: ExerciseInfo(
-              name: 'Pushups',
-              warmupInfo: dummyWarmup
+          home: Scaffold(
+            body: ExerciseWidget(
+              exerciseInfo: ExerciseInfo(
+                name: 'Pushups',
+                warmupInfo: dummyWarmup
+              ),
             ),
           )
         )
@@ -45,10 +47,12 @@ void main() {
       Provider<WorkoutRepository>.value(
         value: mockRepository,
         child: MaterialApp(
-          home: ExerciseWidget(
-            exerciseInfo: ExerciseInfo(
-              name: 'Squats',
-              warmupInfo: dummyWarmup
+          home: Scaffold(
+            body: ExerciseWidget(
+              exerciseInfo: ExerciseInfo(
+                name: 'Squats',
+                warmupInfo: dummyWarmup
+              ),
             ),
           )
         )
@@ -56,23 +60,24 @@ void main() {
     );
 
     await tester.enterText(find.byType(TextField), '42');
-    expect(find.text('Warmup for 42'), findsOneWidget);
+    await tester.pump();
+    expect(find.text('Warmup for 42.0'), findsOneWidget);
   });
 
   testWidgets('Does not render weight input when requiresWeight is false', (tester) async {
     await tester.pumpWidget(
       Provider<WorkoutRepository>.value(
         value: mockRepository,
-        child: MaterialApp(
+        child: const MaterialApp(
           home: Scaffold(
             body: ExerciseWidget(
-              exerciseInfo: const ExerciseInfo(
+              exerciseInfo: ExerciseInfo(
                 name: 'Hollow Body Hold',
                 requiresWeight: false
               ),
             ),
-          )
-        )
+          ),
+        ),
       )
     );
 

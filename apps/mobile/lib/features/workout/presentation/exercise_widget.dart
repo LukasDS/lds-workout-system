@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:workout/features/workout/domain/exercise_info.dart';
 import 'package:workout/features/workout/data/workout_repository.dart';
 import 'package:workout/core/utils/debouncer.dart';
+
+final _weightInputRegex = RegExp(r"^[0-9]*\.?[0-9]*$");
 
 /// A widget representing an exercise with a name and a weight input field.
 class ExerciseWidget extends StatefulWidget {
@@ -22,39 +25,47 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
   double? _weight;
   late TextEditingController _weightController;
   final Debouncer _debouncer = Debouncer(milliseconds: 1000);
+  StreamSubscription<double?>? _weightSubscription;
+  final FocusNode _focusNode = FocusNode();
 
-  /// Initializes the TextEditingController and loads the current weight for the exercise.
+  /// Initializes the TextEditingController and subscribes to weight updates.
   @override
   void initState() {
     super.initState();
 
     _weightController = TextEditingController();
-    _loadData();
+    _subscribeToData();
   }
 
-  /// Disposes the TextEditingController and cancels the debouncer.
+  /// Disposes the TextEditingController, cancels the debouncer and the stream subscription.
   @override
   void dispose() {
     _weightController.dispose();
     _debouncer.cancel();
+    _weightSubscription?.cancel();
+    _focusNode.dispose();
     super.dispose();
   }
 
-  Future<void> _loadData() async {
-    try {
-      final weight =
-          await workoutRepository.getCurrentWeight(widget.exerciseInfo.name);
+  void _subscribeToData() {
+    _weightSubscription = workoutRepository
+        .watchCurrentWeight(widget.exerciseInfo.name)
+        .listen((weight) {
+      if (!mounted) return;
       setState(() {
         _weight = weight;
-        _weightController.text = formatWeight(_weight);
+        // Only update text field if not focused to avoid cursor jumping
+        if (!_focusNode.hasFocus) {
+          _weightController.text = formatWeight(_weight);
+        }
       });
-    } catch (e, stack) {
+    }, onError: (e, stack) {
       debugPrint('Failed to load data: $e\n$stack');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Failed to load weight.')));
       }
-    }
+    });
   }
 
   Future<void> _saveWeight(double? weight) async {
@@ -83,11 +94,12 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
     return Center(
         child: Column(children: [
       Text(widget.exerciseInfo.name, style: const TextStyle(fontSize: 20)),
-      Container(
+      SizedBox(
           width: 250,
           child: Column(children: [
             if (widget.exerciseInfo.requiresWeight)
               TextField(
+                  focusNode: _focusNode,
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                     signed: false,
@@ -104,8 +116,7 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
                     _debouncer.run(() => _saveWeight(_weight));
                   },
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r"^[0-9]*\.?[0-9]*$")),
+                    FilteringTextInputFormatter.allow(_weightInputRegex),
                   ]),
             const SizedBox(height: 2),
             if (widget.exerciseInfo.warmupInfo != null)

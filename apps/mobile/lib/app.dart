@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:workout/features/workout/data/firebase_workout_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workout/features/workout/data/workout_repository.dart';
 import 'package:workout/core/storage/local_storage.dart';
 import 'package:workout/core/storage/shared_prefs_storage.dart';
@@ -12,16 +11,23 @@ const _workoutRed = Color(0xFFB5001E);
 const _workoutRedSoft = Color(0x66D05C70);
 
 class WorkoutApp extends StatelessWidget {
-  const WorkoutApp({super.key});
+  final SharedPreferences prefs;
+  final int initialIndex;
+  final WorkoutRepository workoutRepository;
+
+  const WorkoutApp({
+    super.key,
+    required this.prefs,
+    required this.initialIndex,
+    required this.workoutRepository,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          Provider<LocalStorage>(create: (_) => SharedPrefsStorage()),
-          Provider<WorkoutRepository>(
-              create: (_) =>
-                  FirebaseWorkoutRepository(FirebaseFirestore.instance))
+          Provider<LocalStorage>(create: (_) => SharedPrefsStorage(prefs)),
+          Provider<WorkoutRepository>.value(value: workoutRepository),
         ],
         child: MaterialApp(
           title: 'Workout',
@@ -78,7 +84,7 @@ class WorkoutApp extends StatelessWidget {
                 ),
               )),
           debugShowCheckedModeBanner: false,
-          home: const WorkoutScreen(),
+          home: WorkoutScreen(initialIndex: initialIndex),
         ));
   }
 }

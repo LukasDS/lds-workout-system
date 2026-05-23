@@ -5,10 +5,12 @@ import 'package:workout/core/storage/local_storage.dart';
 import 'package:workout/core/utils/warmup_utils.dart';
 import 'package:workout/features/workout/presentation/workout_split_widget.dart';
 import 'package:workout/features/workout/presentation/rest_stopwatch_widget.dart';
+import 'package:workout/core/utils/debouncer.dart';
 
 /// The main widget for the workout home screen, which contains a PageView for different workout splits.
 class WorkoutScreen extends StatefulWidget {
-  const WorkoutScreen({super.key});
+  final int initialIndex;
+  const WorkoutScreen({super.key, this.initialIndex = 0});
 
   @override
   State<WorkoutScreen> createState() => _WorkoutScreenState();
@@ -16,14 +18,53 @@ class WorkoutScreen extends StatefulWidget {
 
 class _WorkoutScreenState extends State<WorkoutScreen> {
   LocalStorage get localStorage => Provider.of<LocalStorage>(context, listen: false);
-  int _currentIndex = 0;
+  late int _currentIndex = widget.initialIndex;
   final int _initialPageOffset = 4000;
-  late final PageController _pageController = PageController(initialPage: _initialPageOffset);
+  late final PageController _pageController = PageController(initialPage: _initialPageOffset + _currentIndex);
+
+  static const List<WorkoutSplitData> _splits = [
+    WorkoutSplitData(
+      title: 'Quads and Abs',
+      exercises: [
+        ExerciseInfo(name: 'Single-Leg Leg Press', warmupInfo: getDefaultWarmupInfo),
+        ExerciseInfo(name: 'Single-Leg Leg Extensions', warmupInfo: getDefaultWarmupInfo),
+        ExerciseInfo(name: 'Adductor Machine', warmupInfo: getDefaultWarmupInfo),
+        ExerciseInfo(name: 'Hollow Body Hold', requiresWeight: false)
+      ],
+    ),
+    WorkoutSplitData(
+      title: 'Chest and Back',
+      exercises: [
+        ExerciseInfo(name: 'Flat Dumbbell Press', warmupInfo: getDefaultWarmupInfo),
+        ExerciseInfo(name: 'Incline Dumbbell Flyes', warmupInfo: getDefaultWarmupInfo),
+        ExerciseInfo(name: 'Pull-Ups', warmupInfo: getPullUpsDynamicStretchingInfo, requiresWeight: false),
+        ExerciseInfo(name: 'Dumbbell Pullovers', warmupInfo: getDefaultWarmupInfo)
+      ],
+    ),
+    WorkoutSplitData(
+      title: 'Legs',
+      exercises: [
+        ExerciseInfo(name: 'Barbell Deadlift', warmupInfo: getBarbellWarmupInfo),
+        ExerciseInfo(name: 'Leg Curls', warmupInfo: getDefaultWarmupInfo),
+        ExerciseInfo(name: 'Abductor Machine', warmupInfo: getDefaultWarmupInfo),
+        ExerciseInfo(name: 'Single-Leg Leg Press Calf Raises', warmupInfo: getDefaultWarmupInfo)
+      ],
+    ),
+    WorkoutSplitData(
+      title: 'Shoulders and Arms',
+      exercises: [
+        ExerciseInfo(name: 'Seated Dumbbell Shoulder Press', warmupInfo: getDefaultWarmupInfo),
+        ExerciseInfo(name: 'Lateral Dumbbell Raises', warmupInfo: getDefaultWarmupInfo),
+        ExerciseInfo(name: 'Aperture L', warmupInfo: getApertureLWarmupInfo),
+        ExerciseInfo(name: 'Bicep Curls', warmupInfo: getDefaultWarmupInfo),
+        ExerciseInfo(name: 'Parallel Bar Dips', warmupInfo: getDipsDynamicStretchingInfo, requiresWeight: false)
+      ],
+    )
+  ];
 
   @override
   void initState() {
     super.initState();
-    _loadSavedIndex();
   }
 
   @override
@@ -32,18 +73,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     super.dispose();
   }
 
-  Future<void> _loadSavedIndex() async {
-    final currentIndex = await localStorage.getInt('currentIndex');
-    if (currentIndex == null) return;
-    setState(() {
-      _currentIndex = currentIndex;
-      _pageController.jumpToPage(_initialPageOffset + _currentIndex);
-    });
-  }
-
   void _onPageChanged(int index) async {
-    final pagesCount = _buildPages().length;
-    final realIndex = index % pagesCount;
+    final realIndex = index % _splits.length;
     setState(() {
       _currentIndex = realIndex;
     });
@@ -51,9 +82,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   }
 
   void _onDestinationSelected(int index) {
-    final pagesCount = _buildPages().length;
     int currentPage = _pageController.page?.round() ?? _initialPageOffset;
-    int currentRealIndex = currentPage % pagesCount;
+    int currentRealIndex = currentPage % _splits.length;
     int offset = index - currentRealIndex;
     
     _pageController.animateToPage(
@@ -63,57 +93,21 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     );
   }
 
-  List<Widget> _buildPages() {
-    return [
-      const WorkoutSplitWidget(
-        title: 'Quads and Abs',
-        exercises: [
-          ExerciseInfo(name: 'Single-Leg Leg Press', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Single-Leg Leg Extensions', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Adductor Machine', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Hollow Body Hold', requiresWeight: false)
-        ],
-      ),
-      const WorkoutSplitWidget(
-        title: 'Chest and Back',
-        exercises: [
-          ExerciseInfo(name: 'Flat Dumbbell Press', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Incline Dumbbell Flyes', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Pull-Ups', warmupInfo: getPullUpsDynamicStretchingInfo, requiresWeight: false),
-          ExerciseInfo(name: 'Dumbbell Pullovers', warmupInfo: getDefaultWarmupInfo)
-        ],
-      ),
-      const WorkoutSplitWidget(
-          title: 'Legs',
-          exercises: [
-            ExerciseInfo(name: 'Barbell Deadlift', warmupInfo: getBarbellWarmupInfo),
-            ExerciseInfo(name: 'Leg Curls', warmupInfo: getDefaultWarmupInfo),
-            ExerciseInfo(name: 'Abductor Machine', warmupInfo: getDefaultWarmupInfo),
-            ExerciseInfo(name: 'Single-Leg Leg Press Calf Raises', warmupInfo: getDefaultWarmupInfo)
-          ]
-      ),
-      const WorkoutSplitWidget(
-        title: 'Shoulders and Arms',
-        exercises: [
-          ExerciseInfo(name: 'Seated Dumbbell Shoulder Press', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Lateral Dumbbell Raises', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Aperture L', warmupInfo: getApertureLWarmupInfo),
-          ExerciseInfo(name: 'Bicep Curls', warmupInfo: getDefaultWarmupInfo),
-          ExerciseInfo(name: 'Parallel Bar Dips', warmupInfo: getDipsDynamicStretchingInfo, requiresWeight: false)
-        ]
-      )
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(_splits[_currentIndex].title),
+      ),
       body: PageView.builder(
         controller: _pageController,
         onPageChanged: _onPageChanged,
         itemBuilder: (context, index) {
-          final pages = _buildPages();
-          return pages[index % pages.length];
+          final split = _splits[index % _splits.length];
+          return WorkoutSplitWidget(
+            title: split.title,
+            exercises: split.exercises,
+          );
         },
       ),
       bottomNavigationBar: Column(
@@ -150,4 +144,10 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       ),
     );
   }
+}
+
+class WorkoutSplitData {
+  final String title;
+  final List<ExerciseInfo> exercises;
+  const WorkoutSplitData({required this.title, required this.exercises});
 }

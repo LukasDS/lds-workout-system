@@ -9,13 +9,15 @@ class FirebaseWorkoutRepository extends WorkoutRepository {
 
   FirebaseWorkoutRepository(this.firestore, {this.collectionName = 'lukas_exercises'});
 
-  /// Retrieves the current weight for a given exercise name.
-  /// Returns null if the exercise does not exist or has no current weight set.
-  /// Throws an exception if the operation fails.
+  /// Watches the current weight for a given exercise name as a stream.
   @override
-  Future<double?> getCurrentWeight(String exerciseName) async {
-    final doc = await firestore.collection(collectionName).doc(exerciseName).get();
-    return doc.exists ? doc.get('currentWeight') as double? : null;
+  Stream<double?> watchCurrentWeight(String exerciseName) {
+    return firestore
+        .collection(collectionName)
+        .doc(exerciseName)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.exists ? snapshot.get('currentWeight') as double? : null);
   }
 
   /// Sets the current weight for an exercise and updates the history.

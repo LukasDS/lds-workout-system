@@ -20,18 +20,13 @@ class WorkoutSplitWidget extends StatelessWidget {
   ///
   @override
   Widget build(BuildContext context) {
-       return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 10),
-        child: Column(
-          children: List.generate(
-            exercises.length,
-            (index) => ExerciseWidget(
-              exerciseInfo: exercises[index]
-            ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(top: 10),
+      child: Column(
+        children: List.generate(
+          exercises.length,
+          (index) => ExerciseWidget(
+            exerciseInfo: exercises[index]
           ),
         ),
       ),

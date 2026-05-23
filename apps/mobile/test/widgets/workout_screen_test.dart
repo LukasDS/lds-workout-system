@@ -1,13 +1,15 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:provider/provider.dart';
+import 'package:workout/app.dart';
 import 'package:workout/core/storage/local_storage.dart';
+import 'package:workout/core/storage/shared_prefs_storage.dart';
 import 'package:workout/features/workout/data/workout_repository.dart';
-import 'package:workout/features/workout/presentation/workout_screen.dart';
 
 class MockLocalStorage extends Mock implements LocalStorage {}
 class MockWorkoutRepository extends Mock implements WorkoutRepository {}
+class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 void main() {
   setUpAll(() {
@@ -20,24 +22,20 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(() => tester.view.resetPhysicalSize());
 
-    final mockLocalStorage = MockLocalStorage();
-    when(() => mockLocalStorage.getInt('currentIndex')).thenAnswer((_) async => 0);
-    when(() => mockLocalStorage.setInt('currentIndex', any())).thenAnswer((_) async {});
+    final mockPrefs = MockSharedPreferences();
+    SharedPrefsStorage(mockPrefs);
+    when(() => mockPrefs.getInt('currentIndex')).thenReturn(0);
+    when(() => mockPrefs.setInt('currentIndex', any())).thenAnswer((_) async => true);
 
-    // Need a real-ish or better mocked repository for ExerciseWidget inside the splits
-    // but here we just need to satisfy the provider.
     final mockWorkoutRepository = MockWorkoutRepository();
-    when(() => mockWorkoutRepository.getCurrentWeight(any())).thenAnswer((_) async => null);
+    when(() => mockWorkoutRepository.watchCurrentWeight(any()))
+        .thenAnswer((_) => Stream.value(null));
 
     await tester.pumpWidget(
-      MultiProvider(
-        providers: [
-          Provider<LocalStorage>.value(value: mockLocalStorage),
-          Provider<WorkoutRepository>.value(value: mockWorkoutRepository),
-        ],
-        child: const MaterialApp(
-          home: WorkoutScreen(),
-        ),
+      WorkoutApp(
+        prefs: mockPrefs,
+        initialIndex: 0,
+        workoutRepository: mockWorkoutRepository,
       ),
     );
 
@@ -50,15 +48,18 @@ void main() {
     await tester.tap(find.text('Shoulders'));
     await tester.pumpAndSettle();
     expect(find.text('Shoulders and Arms'), findsWidgets);
-    verify(() => mockLocalStorage.setInt('currentIndex', 3)).called(1);
+    // storage is debounced, so we wait or trigger it
+    await tester.pump(const Duration(milliseconds: 501));
+    verify(() => mockPrefs.setInt('currentIndex', 3)).called(1);
 
     // 2. Test Swiping: Swipe right to go to 'Legs' (index 2)
     // Offset > 0 means swiping from left-to-right, moving viewport left.
-    clearInteractions(mockLocalStorage);
+    clearInteractions(mockPrefs);
     await tester.drag(find.byType(PageView), const Offset(600.0, 0.0));
     await tester.pumpAndSettle();
     expect(find.text('Legs'), findsWidgets);
-    verify(() => mockLocalStorage.setInt('currentIndex', 2)).called(1);
+    await tester.pump(const Duration(milliseconds: 501));
+    verify(() => mockPrefs.setInt('currentIndex', 2)).called(1);
 
     // 3. Test Navigation Bar: Tap 'Quads' (index 0)
     await tester.tap(find.text('Quads'));
@@ -66,17 +67,19 @@ void main() {
     expect(find.text('Quads and Abs'), findsWidgets);
     
     // 4. Test Infinite Loop: SWIPE RIGHT at the start to loop to the END
-    clearInteractions(mockLocalStorage);
+    clearInteractions(mockPrefs);
     await tester.drag(find.byType(PageView), const Offset(600.0, 0.0));
     await tester.pumpAndSettle();
     expect(find.text('Shoulders and Arms'), findsWidgets);
-    verify(() => mockLocalStorage.setInt('currentIndex', 3)).called(1);
+    await tester.pump(const Duration(milliseconds: 501));
+    verify(() => mockPrefs.setInt('currentIndex', 3)).called(1);
     
     // 5. Test Infinite Loop: SWIPE LEFT at the end to loop to the START
-    clearInteractions(mockLocalStorage);
+    clearInteractions(mockPrefs);
     await tester.drag(find.byType(PageView), const Offset(-600.0, 0.0));
     await tester.pumpAndSettle();
     expect(find.text('Quads and Abs'), findsWidgets);
-    verify(() => mockLocalStorage.setInt('currentIndex', 0)).called(1);
+    await tester.pump(const Duration(milliseconds: 501));
+    verify(() => mockPrefs.setInt('currentIndex', 0)).called(1);
   });
 }
