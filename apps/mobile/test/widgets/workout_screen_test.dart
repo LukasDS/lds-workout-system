@@ -15,6 +15,11 @@ void main() {
   });
 
   testWidgets('WorkoutScreen infinite carousel works', (tester) async {
+    // Set a larger surface size to ensure bottom navigation is on screen
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
     final mockLocalStorage = MockLocalStorage();
     when(() => mockLocalStorage.getInt('currentIndex')).thenAnswer((_) async => 0);
     when(() => mockLocalStorage.setInt('currentIndex', any())).thenAnswer((_) async {});
@@ -22,6 +27,7 @@ void main() {
     // Need a real-ish or better mocked repository for ExerciseWidget inside the splits
     // but here we just need to satisfy the provider.
     final mockWorkoutRepository = MockWorkoutRepository();
+    when(() => mockWorkoutRepository.getCurrentWeight(any())).thenAnswer((_) async => null);
 
     await tester.pumpWidget(
       MultiProvider(
@@ -48,6 +54,7 @@ void main() {
 
     // 2. Test Swiping: Swipe right to go to 'Legs' (index 2)
     // Offset > 0 means swiping from left-to-right, moving viewport left.
+    clearInteractions(mockLocalStorage);
     await tester.drag(find.byType(PageView), const Offset(600.0, 0.0));
     await tester.pumpAndSettle();
     expect(find.text('Legs'), findsWidgets);
@@ -59,12 +66,14 @@ void main() {
     expect(find.text('Quads and Abs'), findsWidgets);
     
     // 4. Test Infinite Loop: SWIPE RIGHT at the start to loop to the END
+    clearInteractions(mockLocalStorage);
     await tester.drag(find.byType(PageView), const Offset(600.0, 0.0));
     await tester.pumpAndSettle();
     expect(find.text('Shoulders and Arms'), findsWidgets);
     verify(() => mockLocalStorage.setInt('currentIndex', 3)).called(1);
     
     // 5. Test Infinite Loop: SWIPE LEFT at the end to loop to the START
+    clearInteractions(mockLocalStorage);
     await tester.drag(find.byType(PageView), const Offset(-600.0, 0.0));
     await tester.pumpAndSettle();
     expect(find.text('Quads and Abs'), findsWidgets);

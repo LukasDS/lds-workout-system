@@ -4,6 +4,7 @@ import 'package:workout/features/workout/domain/exercise_info.dart';
 import 'package:workout/core/storage/local_storage.dart';
 import 'package:workout/core/utils/warmup_utils.dart';
 import 'package:workout/features/workout/presentation/workout_split_widget.dart';
+import 'package:workout/features/workout/presentation/rest_stopwatch_widget.dart';
 
 /// The main widget for the workout home screen, which contains a PageView for different workout splits.
 class WorkoutScreen extends StatefulWidget {
@@ -115,29 +116,35 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           return pages[index % pages.length];
         },
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: _onDestinationSelected,
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.directions_run_outlined),
-            selectedIcon: Icon(Icons.directions_run),
-            label: 'Quads',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.compare_arrows_outlined),
-            selectedIcon: Icon(Icons.compare_arrows),
-            label: 'Chest/Back',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.hiking_outlined),
-            selectedIcon: Icon(Icons.hiking),
-            label: 'Legs',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.accessibility_new_outlined),
-            selectedIcon: Icon(Icons.accessibility_new),
-            label: 'Shoulders',
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const RestStopwatchWidget(),
+          NavigationBar(
+            selectedIndex: _currentIndex,
+            onDestinationSelected: _onDestinationSelected,
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.directions_run_outlined),
+                selectedIcon: Icon(Icons.directions_run),
+                label: 'Quads',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.compare_arrows_outlined),
+                selectedIcon: Icon(Icons.compare_arrows),
+                label: 'Chest/Back',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.hiking_outlined),
+                selectedIcon: Icon(Icons.hiking),
+                label: 'Legs',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.accessibility_new_outlined),
+                selectedIcon: Icon(Icons.accessibility_new),
+                label: 'Shoulders',
+              ),
+            ],
           ),
         ],
       ),
