@@ -1,61 +1,32 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:workout/features/workout/presentation/stopwatch_service.dart';
 
 class RestStopwatchWidget extends StatefulWidget {
-  final DateTime Function() now;
-
-  const RestStopwatchWidget({
-    super.key,
-    this.now = DateTime.now,
-  });
+  const RestStopwatchWidget({super.key});
 
   @override
   State<RestStopwatchWidget> createState() => _RestStopwatchWidgetState();
 }
 
-class _RestStopwatchWidgetState extends State<RestStopwatchWidget> {
-  DateTime? _startTime;
-  Duration _previousDuration = Duration.zero;
-  Timer? _timer;
-  final ValueNotifier<Duration> _elapsedNotifier = ValueNotifier(Duration.zero);
-
-  bool get _isRunning => _startTime != null;
-
-  Duration get _elapsedDuration {
-    if (_startTime == null) return _previousDuration;
-    return _previousDuration + widget.now().difference(_startTime!);
+class _RestStopwatchWidgetState extends State<RestStopwatchWidget> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
-  void _start() {
-    if (_isRunning) return;
-    setState(() {
-      _startTime = widget.now();
-      _elapsedNotifier.value = _elapsedDuration;
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        _elapsedNotifier.value = _elapsedDuration;
-      });
-    });
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
-  void _pause() {
-    if (!_isRunning) return;
-    setState(() {
-      _previousDuration += widget.now().difference(_startTime!);
-      _startTime = null;
-      _elapsedNotifier.value = _previousDuration;
-      _timer?.cancel();
-      _timer = null;
-    });
-  }
-
-  void _reset() {
-    setState(() {
-      _startTime = null;
-      _previousDuration = Duration.zero;
-      _elapsedNotifier.value = Duration.zero;
-      _timer?.cancel();
-      _timer = null;
-    });
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      context.read<StopwatchService>().reloadState();
+    }
   }
 
   String _formatDuration(Duration d) {
@@ -66,15 +37,9 @@ class _RestStopwatchWidgetState extends State<RestStopwatchWidget> {
   }
 
   @override
-  void dispose() {
-    _timer?.cancel();
-    _elapsedNotifier.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final stopwatchService = Provider.of<StopwatchService>(context);
 
     return SizedBox(
       height: 60,
@@ -100,43 +65,38 @@ class _RestStopwatchWidgetState extends State<RestStopwatchWidget> {
                   const SizedBox(width: 12),
                   SizedBox(
                     width: 76,
-                    child: ValueListenableBuilder<Duration>(
-                      valueListenable: _elapsedNotifier,
-                      builder: (context, elapsed, child) {
-                        return Text(
-                          _formatDuration(elapsed),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'monospace',
-                          ),
-                        );
-                      },
+                    child: Text(
+                      _formatDuration(stopwatchService.elapsedDuration),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'monospace',
+                      ),
                     ),
                   ),
                 ],
               ),
               Row(
                 children: [
-                  if (!_isRunning)
+                  if (!stopwatchService.isRunning)
                     IconButton(
                       icon: const Icon(Icons.play_arrow_rounded, size: 32),
                       color: theme.colorScheme.primary,
-                      onPressed: _start,
+                      onPressed: stopwatchService.start,
                       tooltip: 'Start',
                     )
                   else
                     IconButton(
                       icon: const Icon(Icons.pause_rounded, size: 32),
                       color: theme.colorScheme.primary,
-                      onPressed: _pause,
+                      onPressed: stopwatchService.pause,
                       tooltip: 'Pause',
                     ),
                   IconButton(
                     icon: const Icon(Icons.refresh_rounded, size: 28),
                     color: Colors.white70,
-                    onPressed: _reset,
+                    onPressed: stopwatchService.reset,
                     tooltip: 'Reset',
                   ),
                 ],
@@ -148,3 +108,4 @@ class _RestStopwatchWidgetState extends State<RestStopwatchWidget> {
     );
   }
 }
+

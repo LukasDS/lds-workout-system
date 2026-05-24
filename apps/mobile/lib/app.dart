@@ -7,6 +7,8 @@ import 'package:workout/core/storage/local_storage.dart';
 import 'package:workout/core/storage/shared_prefs_storage.dart';
 import 'features/workout/presentation/workout_screen.dart';
 
+import 'package:workout/features/workout/presentation/stopwatch_service.dart';
+
 const _workoutRed = Color(0xFFB5001E);
 const _workoutRedSoft = Color(0x66D05C70);
 
@@ -28,6 +30,7 @@ class WorkoutApp extends StatelessWidget {
         providers: [
           Provider<LocalStorage>(create: (_) => SharedPrefsStorage(prefs)),
           Provider<WorkoutRepository>.value(value: workoutRepository),
+          ChangeNotifierProvider<StopwatchService>(create: (_) => StopwatchService(prefs)),
         ],
         child: MaterialApp(
           title: 'Workout',

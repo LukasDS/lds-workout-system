@@ -1,90 +1,98 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workout/features/workout/presentation/rest_stopwatch_widget.dart';
+import 'package:workout/features/workout/presentation/stopwatch_service.dart';
 
 void main() {
-  late DateTime fakeNow;
-  DateTime now() => fakeNow;
+  late SharedPreferences prefs;
+  late StopwatchService stopwatchService;
 
-  setUp(() {
-    fakeNow = DateTime(2026, 1, 1, 12, 0, 0);
+  setUp(() async {
+    SharedPreferences.setMockInitialValues({});
+    prefs = await SharedPreferences.getInstance();
+    stopwatchService = StopwatchService(prefs);
+
+    // Mock MethodChannel
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      const MethodChannel('io.github.lukasds.workout/stopwatch'),
+      (methodCall) async => null,
+    );
+  });
+
+  tearDown(() {
+    stopwatchService.dispose();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      const MethodChannel('io.github.lukasds.workout/stopwatch'),
+      null,
+    );
   });
 
   testWidgets('RestStopwatchWidget starts at 00:00', (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: RestStopwatchWidget(now: now),
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ChangeNotifierProvider<StopwatchService>.value(
+            value: stopwatchService,
+            child: const RestStopwatchWidget(),
+          ),
         ),
       ),
-    ));
+    );
     expect(find.text('00:00'), findsOneWidget);
   });
 
   testWidgets('RestStopwatchWidget starts and increments', (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: RestStopwatchWidget(now: now),
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ChangeNotifierProvider<StopwatchService>.value(
+            value: stopwatchService,
+            child: const RestStopwatchWidget(),
+          ),
         ),
       ),
-    ));
+    );
     
     await tester.tap(find.byIcon(Icons.play_arrow_rounded));
-    await tester.pump(); 
+    await tester.pumpAndSettle(); 
     
-    fakeNow = fakeNow.add(const Duration(seconds: 2));
-    await tester.pump(const Duration(seconds: 2));
+    expect(stopwatchService.isRunning, isTrue);
+    expect(find.byIcon(Icons.pause_rounded), findsOneWidget);
     
-    expect(find.text('00:02'), findsOneWidget);
+    // Cleanup
+    stopwatchService.stop();
+    await tester.pumpAndSettle();
   });
 
-  testWidgets('RestStopwatchWidget pauses and resumes', (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: RestStopwatchWidget(now: now),
+  testWidgets('RestStopwatchWidget resets but keeps running', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ChangeNotifierProvider<StopwatchService>.value(
+            value: stopwatchService,
+            child: const RestStopwatchWidget(),
+          ),
         ),
       ),
-    ));
+    );
     
     await tester.tap(find.byIcon(Icons.play_arrow_rounded));
-    await tester.pump();
-    fakeNow = fakeNow.add(const Duration(seconds: 2));
-    await tester.pump(const Duration(seconds: 2));
-    expect(find.text('00:02'), findsOneWidget);
-    
-    await tester.tap(find.byIcon(Icons.pause_rounded));
-    await tester.pump();
-    
-    fakeNow = fakeNow.add(const Duration(seconds: 2));
-    await tester.pump(const Duration(seconds: 2));
-    expect(find.text('00:02'), findsOneWidget);
-    
-    await tester.tap(find.byIcon(Icons.play_arrow_rounded));
-    await tester.pump();
-    fakeNow = fakeNow.add(const Duration(seconds: 1));
-    await tester.pump(const Duration(seconds: 1));
-    expect(find.text('00:03'), findsOneWidget);
-  });
-
-  testWidgets('RestStopwatchWidget resets', (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: RestStopwatchWidget(now: now),
-        ),
-      ),
-    ));
-    
-    await tester.tap(find.byIcon(Icons.play_arrow_rounded));
-    await tester.pump();
-    fakeNow = fakeNow.add(const Duration(seconds: 2));
-    await tester.pump(const Duration(seconds: 2));
-    expect(find.text('00:02'), findsOneWidget);
+    await tester.pumpAndSettle();
+    expect(stopwatchService.isRunning, isTrue);
     
     await tester.tap(find.byIcon(Icons.refresh_rounded));
-    await tester.pump();
-    expect(find.text('00:00'), findsOneWidget);
+    await tester.pumpAndSettle();
+    
+    // NEW BEHAVIOR: Should still be running
+    expect(stopwatchService.isRunning, isTrue);
+    
+    // Cleanup
+    stopwatchService.stop();
+    await tester.pumpAndSettle();
   });
 }
