@@ -81,7 +81,7 @@ void main() {
       final mockHistoryDoc = MockDocumentReference();
 
       when(() => mockDocument.collection('history')).thenReturn(mockHistoryCollection);
-      when(() => mockHistoryCollection.doc()).thenReturn(mockHistoryDoc);
+      when(() => mockHistoryCollection.doc(any())).thenReturn(mockHistoryDoc);
       
       when(() => mockTransaction.set<Map<String, dynamic>>(any(), any(), any())).thenReturn(mockTransaction);
       when(() => mockTransaction.set<Map<String, dynamic>>(any(), any())).thenReturn(mockTransaction);

@@ -33,7 +33,11 @@ class FirebaseWorkoutRepository extends WorkoutRepository {
         transaction.set(exerciseDoc, {'currentWeight': weight}, SetOptions(merge: true));
 
         // Add the new weight to the history
-        transaction.set(exerciseDoc.collection('history').doc(), {
+        final now = DateTime.now();
+        final dateString =
+            '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+
+        transaction.set(exerciseDoc.collection('history').doc(dateString), {
           'weight': weight,
           'date': Timestamp.now()
         });
