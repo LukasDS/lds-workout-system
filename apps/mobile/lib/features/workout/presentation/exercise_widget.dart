@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:workout/features/workout/domain/exercise_info.dart';
+import 'package:workout/features/workout/domain/exercise.dart';
 import 'package:workout/features/workout/data/workout_repository.dart';
 import 'package:workout/features/workout/presentation/exercise_view_model.dart';
 
@@ -9,7 +9,7 @@ final _weightInputRegex = RegExp(r"^[0-9]*\.?[0-9]*$");
 
 /// A widget representing an exercise with a name and a weight input field.
 class ExerciseWidget extends StatefulWidget {
-  final ExerciseInfo exerciseInfo;
+  final Exercise exerciseInfo;
 
   const ExerciseWidget({super.key, required this.exerciseInfo});
 

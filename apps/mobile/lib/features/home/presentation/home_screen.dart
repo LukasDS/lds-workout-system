@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:workout/features/workout/domain/exercise_info.dart';
-import 'package:workout/core/storage/local_storage.dart';
+import 'package:workout/features/workout/domain/exercise.dart';
+import 'package:workout/core/storage/storage.dart';
 import 'package:workout/core/utils/warmup_utils.dart';
 import 'package:workout/features/workout/presentation/workout_split_widget.dart';
-import 'package:workout/features/workout/presentation/rest_stopwatch_widget.dart';
+import 'package:workout/features/rest_stopwatch/presentation/rest_stopwatch_widget.dart';
 
-/// The main widget for the workout home screen, which contains a PageView for different workout splits.
-class WorkoutScreen extends StatefulWidget {
+/// The main widget for the home screen, which contains a PageView for different workout splits.
+class HomeScreen extends StatefulWidget {
   final int initialIndex;
-  const WorkoutScreen({super.key, this.initialIndex = 0});
+  const HomeScreen({super.key, this.initialIndex = 0});
 
   @override
-  State<WorkoutScreen> createState() => _WorkoutScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _WorkoutScreenState extends State<WorkoutScreen> {
-  LocalStorage get localStorage => Provider.of<LocalStorage>(context, listen: false);
+class _HomeScreenState extends State<HomeScreen> {
+  Storage get localStorage => Provider.of<Storage>(context, listen: false);
   late int _currentIndex = widget.initialIndex;
   final int _initialPageOffset = 4000;
   late final PageController _pageController = PageController(initialPage: _initialPageOffset + _currentIndex);
@@ -25,38 +25,38 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     WorkoutSplitData(
       title: 'Quads and Abs',
       exercises: [
-        ExerciseInfo(name: 'Single-Leg Leg Press', warmupInfo: getDefaultWarmupInfo),
-        ExerciseInfo(name: 'Single-Leg Leg Extensions', warmupInfo: getDefaultWarmupInfo),
-        ExerciseInfo(name: 'Adductor Machine', warmupInfo: getDefaultWarmupInfo),
-        ExerciseInfo(name: 'Hollow Body Hold', requiresWeight: false)
+        Exercise(name: 'Single-Leg Leg Press', warmupInfo: getDefaultWarmupInfo),
+        Exercise(name: 'Single-Leg Leg Extensions', warmupInfo: getDefaultWarmupInfo),
+        Exercise(name: 'Adductor Machine', warmupInfo: getDefaultWarmupInfo),
+        Exercise(name: 'Hollow Body Hold', requiresWeight: false)
       ],
     ),
     WorkoutSplitData(
       title: 'Chest and Back',
       exercises: [
-        ExerciseInfo(name: 'Flat Dumbbell Press', warmupInfo: getDefaultWarmupInfo),
-        ExerciseInfo(name: 'Incline Dumbbell Flyes', warmupInfo: getDefaultWarmupInfo),
-        ExerciseInfo(name: 'Pull-Ups', warmupInfo: getPullUpsDynamicStretchingInfo, requiresWeight: false),
-        ExerciseInfo(name: 'Dumbbell Pullovers', warmupInfo: getDefaultWarmupInfo)
+        Exercise(name: 'Flat Dumbbell Press', warmupInfo: getDefaultWarmupInfo),
+        Exercise(name: 'Incline Dumbbell Flyes', warmupInfo: getDefaultWarmupInfo),
+        Exercise(name: 'Pull-Ups', warmupInfo: getPullUpsDynamicStretchingInfo, requiresWeight: false),
+        Exercise(name: 'Dumbbell Pullovers', warmupInfo: getDefaultWarmupInfo)
       ],
     ),
     WorkoutSplitData(
       title: 'Legs',
       exercises: [
-        ExerciseInfo(name: 'Barbell Deadlift', warmupInfo: getBarbellWarmupInfo),
-        ExerciseInfo(name: 'Leg Curls', warmupInfo: getDefaultWarmupInfo),
-        ExerciseInfo(name: 'Abductor Machine', warmupInfo: getDefaultWarmupInfo),
-        ExerciseInfo(name: 'Single-Leg Leg Press Calf Raises', warmupInfo: getDefaultWarmupInfo)
+        Exercise(name: 'Barbell Deadlift', warmupInfo: getBarbellWarmupInfo),
+        Exercise(name: 'Leg Curls', warmupInfo: getDefaultWarmupInfo),
+        Exercise(name: 'Abductor Machine', warmupInfo: getDefaultWarmupInfo),
+        Exercise(name: 'Single-Leg Leg Press Calf Raises', warmupInfo: getDefaultWarmupInfo)
       ],
     ),
     WorkoutSplitData(
       title: 'Shoulders and Arms',
       exercises: [
-        ExerciseInfo(name: 'Seated Dumbbell Shoulder Press', warmupInfo: getDefaultWarmupInfo),
-        ExerciseInfo(name: 'Lateral Dumbbell Raises', warmupInfo: getDefaultWarmupInfo),
-        ExerciseInfo(name: 'Aperture L', warmupInfo: getApertureLWarmupInfo),
-        ExerciseInfo(name: 'Bicep Curls', warmupInfo: getDefaultWarmupInfo),
-        ExerciseInfo(name: 'Parallel Bar Dips', warmupInfo: getDipsDynamicStretchingInfo, requiresWeight: false)
+        Exercise(name: 'Seated Dumbbell Shoulder Press', warmupInfo: getDefaultWarmupInfo),
+        Exercise(name: 'Lateral Dumbbell Raises', warmupInfo: getDefaultWarmupInfo),
+        Exercise(name: 'Aperture L', warmupInfo: getApertureLWarmupInfo),
+        Exercise(name: 'Bicep Curls', warmupInfo: getDefaultWarmupInfo),
+        Exercise(name: 'Parallel Bar Dips', warmupInfo: getDipsDynamicStretchingInfo, requiresWeight: false)
       ],
     )
   ];
@@ -145,6 +145,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
 class WorkoutSplitData {
   final String title;
-  final List<ExerciseInfo> exercises;
+  final List<Exercise> exercises;
   const WorkoutSplitData({required this.title, required this.exercises});
 }

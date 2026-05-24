@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
-import 'package:workout/features/workout/domain/exercise_info.dart';
+import 'package:workout/features/workout/domain/exercise.dart';
 import 'package:workout/features/workout/data/workout_repository.dart';
 import 'package:workout/features/workout/presentation/workout_split_widget.dart';
 
@@ -24,11 +24,11 @@ void main() {
           body: WorkoutSplitWidget(
             title: 'Legs',
             exercises: [
-              ExerciseInfo(
+              Exercise(
                 name: 'Deadlifts',
                 warmupInfo: (w) => '', 
               ),
-              ExerciseInfo(
+              Exercise(
                 name: 'Calf raises',
                 warmupInfo: (w) => ''
               )

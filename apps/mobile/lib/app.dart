@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workout/features/workout/data/workout_repository.dart';
-import 'package:workout/core/storage/local_storage.dart';
+import 'package:workout/core/storage/storage.dart';
 import 'package:workout/core/storage/shared_prefs_storage.dart';
-import 'features/workout/presentation/workout_screen.dart';
+import 'package:workout/features/home/presentation/home_screen.dart';
 
-import 'package:workout/features/workout/presentation/stopwatch_service.dart';
+import 'package:workout/features/rest_stopwatch/application/rest_stopwatch_service.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -66,9 +66,9 @@ class _WorkoutAppState extends State<WorkoutApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          Provider<LocalStorage>(create: (_) => SharedPrefsStorage(widget.prefs)),
+          Provider<Storage>(create: (_) => SharedPrefsStorage(widget.prefs)),
           Provider<WorkoutRepository?>.value(value: _workoutRepository),
-          ChangeNotifierProvider<StopwatchService>(create: (_) => StopwatchService(widget.prefs)),
+          ChangeNotifierProvider<RestStopwatchService>(create: (_) => RestStopwatchService(widget.prefs)),
         ],
         child: MaterialApp(
           title: 'Workout',
@@ -125,7 +125,7 @@ class _WorkoutAppState extends State<WorkoutApp> {
                 ),
               )),
           debugShowCheckedModeBanner: false,
-          home: WorkoutScreen(initialIndex: widget.initialIndex),
+          home: HomeScreen(initialIndex: widget.initialIndex),
         ));
   }
 }

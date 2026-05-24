@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
-import 'package:workout/features/workout/domain/exercise_info.dart';
+import 'package:workout/features/workout/domain/exercise.dart';
 import 'package:workout/features/workout/data/workout_repository.dart';
 import 'package:workout/features/workout/presentation/exercise_widget.dart';
 
@@ -27,7 +27,7 @@ void main() {
         child: MaterialApp(
           home: Scaffold(
             body: ExerciseWidget(
-              exerciseInfo: ExerciseInfo(
+              exerciseInfo: Exercise(
                 name: 'Pushups',
                 warmupInfo: dummyWarmup
               ),
@@ -54,7 +54,7 @@ void main() {
         child: MaterialApp(
           home: Scaffold(
             body: ExerciseWidget(
-              exerciseInfo: ExerciseInfo(
+              exerciseInfo: Exercise(
                 name: 'Bench Press',
                 warmupInfo: dummyWarmup
               ),
@@ -80,7 +80,7 @@ void main() {
         child: MaterialApp(
           home: Scaffold(
             body: ExerciseWidget(
-              exerciseInfo: ExerciseInfo(
+              exerciseInfo: Exercise(
                 name: 'Squats',
                 warmupInfo: dummyWarmup
               ),
@@ -116,7 +116,7 @@ void main() {
         child: const MaterialApp(
           home: Scaffold(
             body: ExerciseWidget(
-              exerciseInfo: ExerciseInfo(
+              exerciseInfo: Exercise(
                 name: 'Hollow Body Hold',
                 requiresWeight: false
               ),
@@ -141,7 +141,7 @@ void main() {
         child: MaterialApp(
           home: Scaffold(
             body: ExerciseWidget(
-              exerciseInfo: ExerciseInfo(
+              exerciseInfo: Exercise(
                 name: 'Error Exercise',
                 warmupInfo: dummyWarmup
               ),
@@ -167,7 +167,7 @@ void main() {
         child: MaterialApp(
           home: Scaffold(
             body: ExerciseWidget(
-              exerciseInfo: ExerciseInfo(
+              exerciseInfo: Exercise(
                 name: 'Save Error',
                 warmupInfo: dummyWarmup
               ),
@@ -205,7 +205,7 @@ void main() {
                 body: Column(
                   children: [
                     const ExerciseWidget(
-                      exerciseInfo: ExerciseInfo(name: 'Switch Test'),
+                      exerciseInfo: Exercise(name: 'Switch Test'),
                     ),
                     ElevatedButton(
                       onPressed: () => setState(() => useFirst = false),

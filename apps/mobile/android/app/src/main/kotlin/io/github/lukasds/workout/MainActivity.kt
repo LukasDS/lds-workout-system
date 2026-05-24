@@ -30,15 +30,15 @@ class MainActivity: FlutterActivity() {
 
             when (call.method) {
                 "startTimer" -> {
-                    startStopwatchService("ACTION_UPDATE", startTime, previousDuration)
+                    startRestStopwatchService("ACTION_UPDATE", startTime, previousDuration)
                     result.success(null)
                 }
                 "pauseTimer" -> {
-                    startStopwatchService("ACTION_UPDATE", 0L, previousDuration)
+                    startRestStopwatchService("ACTION_UPDATE", 0L, previousDuration)
                     result.success(null)
                 }
                 "resetTimer" -> {
-                    startStopwatchService("ACTION_UPDATE", 0L, 0L)
+                    startRestStopwatchService("ACTION_UPDATE", 0L, 0L)
                     result.success(null)
                 }
                 "stopTimer" -> {
@@ -64,7 +64,7 @@ class MainActivity: FlutterActivity() {
         } catch (e: Exception) {}
     }
 
-    private fun startStopwatchService(action: String, startTime: Long, previousDuration: Long) {
+    private fun startRestStopwatchService(action: String, startTime: Long, previousDuration: Long) {
         val intent = Intent(this, StopwatchForegroundService::class.java).apply {
             this.action = action
             putExtra("startTime", startTime)

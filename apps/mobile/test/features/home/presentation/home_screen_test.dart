@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:workout/app.dart';
-import 'package:workout/core/storage/local_storage.dart';
+import 'package:workout/core/storage/storage.dart';
 import 'package:workout/core/storage/shared_prefs_storage.dart';
 import 'package:workout/features/workout/data/workout_repository.dart';
 
-class MockLocalStorage extends Mock implements LocalStorage {}
+class MockStorage extends Mock implements Storage {}
 class MockWorkoutRepository extends Mock implements WorkoutRepository {}
 class MockSharedPreferences extends Mock implements SharedPreferences {}
 
@@ -16,7 +16,7 @@ void main() {
     registerFallbackValue(DateTime.now());
   });
 
-  testWidgets('WorkoutScreen infinite carousel works', (tester) async {
+  testWidgets('HomeScreen infinite carousel works', (tester) async {
     // Set a larger surface size to ensure bottom navigation is on screen
     tester.view.physicalSize = const Size(1080, 2400);
     tester.view.devicePixelRatio = 1.0;
@@ -83,7 +83,7 @@ void main() {
     verify(() => mockPrefs.setInt('currentIndex', 0)).called(1);
   });
 
-  testWidgets('WorkoutScreen loads with correct initial index', (tester) async {
+  testWidgets('HomeScreen loads with correct initial index', (tester) async {
     final mockPrefs = MockSharedPreferences();
     when(() => mockPrefs.getInt('currentIndex')).thenReturn(2);
     when(() => mockPrefs.setInt('currentIndex', any())).thenAnswer((_) async => true);

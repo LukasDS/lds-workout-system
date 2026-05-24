@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class StopwatchService extends ChangeNotifier {
+class RestStopwatchService extends ChangeNotifier {
   static const String _keyStartTime = 'stopwatch_start_time';
   static const String _keyPreviousDuration = 'stopwatch_previous_duration';
   static const String _keyIsRunning = 'stopwatch_is_running';
@@ -17,7 +17,7 @@ class StopwatchService extends ChangeNotifier {
   bool _isRunning = false;
   Timer? _timer;
 
-  StopwatchService(this._prefs) {
+  RestStopwatchService(this._prefs) {
     _loadState();
     _channel.setMethodCallHandler((call) async {
       if (call.method == 'reloadState') {

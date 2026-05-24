@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:workout/features/workout/domain/exercise_info.dart';
+import 'package:workout/features/workout/domain/exercise.dart';
 
 void main() {
-  test('ExerciseInfo constructs and warmupInfo is callable', () {
-    final exerciseInfo = ExerciseInfo(
+  test('Exercise constructs and warmupInfo is callable', () {
+    final exerciseInfo = Exercise(
       name: 'Test',
       warmupInfo: (w) => 'called $w',
     );

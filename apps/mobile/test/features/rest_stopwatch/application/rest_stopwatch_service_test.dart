@@ -1,14 +1,14 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workout/features/workout/presentation/stopwatch_service.dart';
+import 'package:workout/features/rest_stopwatch/application/rest_stopwatch_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('StopwatchService', () {
+  group('RestStopwatchService', () {
     late SharedPreferences prefs;
-    late StopwatchService service;
+    late RestStopwatchService service;
     final List<MethodCall> methodCalls = [];
 
     setUp(() async {
@@ -25,7 +25,7 @@ void main() {
         },
       );
 
-      service = StopwatchService(prefs);
+      service = RestStopwatchService(prefs);
     });
 
     tearDown(() {
@@ -85,7 +85,7 @@ void main() {
       expect(startTime, isNotNull);
       expect(prefs.getBool('stopwatch_is_running'), isTrue);
 // Create a new service instance to simulate app restart
-final newService = StopwatchService(prefs);
+final newService = RestStopwatchService(prefs);
 expect(newService.isRunning, isTrue);
 expect(newService.elapsedDuration.inMilliseconds, greaterThan(0));
 newService.dispose();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:workout/features/workout/presentation/stopwatch_service.dart';
+import 'package:workout/features/rest_stopwatch/application/rest_stopwatch_service.dart';
 
 class RestStopwatchWidget extends StatefulWidget {
   const RestStopwatchWidget({super.key});
@@ -25,7 +25,7 @@ class _RestStopwatchWidgetState extends State<RestStopwatchWidget> with WidgetsB
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      context.read<StopwatchService>().reloadState();
+      context.read<RestStopwatchService>().reloadState();
     }
   }
 
@@ -39,7 +39,7 @@ class _RestStopwatchWidgetState extends State<RestStopwatchWidget> with WidgetsB
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final stopwatchService = Provider.of<StopwatchService>(context);
+    final stopwatchService = Provider.of<RestStopwatchService>(context);
 
     return SizedBox(
       height: 60,

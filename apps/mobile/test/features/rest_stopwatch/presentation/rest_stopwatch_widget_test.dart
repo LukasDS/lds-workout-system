@@ -3,17 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workout/features/workout/presentation/rest_stopwatch_widget.dart';
-import 'package:workout/features/workout/presentation/stopwatch_service.dart';
+import 'package:workout/features/rest_stopwatch/presentation/rest_stopwatch_widget.dart';
+import 'package:workout/features/rest_stopwatch/application/rest_stopwatch_service.dart';
 
 void main() {
   late SharedPreferences prefs;
-  late StopwatchService stopwatchService;
+  late RestStopwatchService stopwatchService;
 
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
     prefs = await SharedPreferences.getInstance();
-    stopwatchService = StopwatchService(prefs);
+    stopwatchService = RestStopwatchService(prefs);
 
     // Mock MethodChannel
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
@@ -36,7 +36,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: ChangeNotifierProvider<StopwatchService>.value(
+          body: ChangeNotifierProvider<RestStopwatchService>.value(
             value: stopwatchService,
             child: const RestStopwatchWidget(),
           ),
@@ -50,7 +50,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: ChangeNotifierProvider<StopwatchService>.value(
+          body: ChangeNotifierProvider<RestStopwatchService>.value(
             value: stopwatchService,
             child: const RestStopwatchWidget(),
           ),
@@ -73,7 +73,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: ChangeNotifierProvider<StopwatchService>.value(
+          body: ChangeNotifierProvider<RestStopwatchService>.value(
             value: stopwatchService,
             child: const RestStopwatchWidget(),
           ),
@@ -100,7 +100,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: ChangeNotifierProvider<StopwatchService>.value(
+          body: ChangeNotifierProvider<RestStopwatchService>.value(
             value: stopwatchService,
             child: const RestStopwatchWidget(),
           ),
