@@ -85,10 +85,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     int currentRealIndex = currentPage % _splits.length;
     int offset = index - currentRealIndex;
     
-    _pageController.animateToPage(
+    _pageController.jumpToPage(
       currentPage + offset,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut
     );
   }
 
