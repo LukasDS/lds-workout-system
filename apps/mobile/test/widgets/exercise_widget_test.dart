@@ -22,7 +22,7 @@ void main() {
 
   testWidgets('Renders exercise name and empty input', (tester) async {
     await tester.pumpWidget(
-      Provider<WorkoutRepository>.value(
+      Provider<WorkoutRepository?>.value(
         value: mockRepository,
         child: MaterialApp(
           home: Scaffold(
@@ -37,6 +37,8 @@ void main() {
       )
     );
 
+    await tester.pumpAndSettle();
+
     expect(find.text('Pushups'), findsOneWidget);
     expect(find.byType(TextField), findsOneWidget);
     expect(find.text('Warmup for'), findsNothing);
@@ -44,7 +46,7 @@ void main() {
 
   testWidgets('Updates warmup when weight entered', (tester) async {
     await tester.pumpWidget(
-      Provider<WorkoutRepository>.value(
+      Provider<WorkoutRepository?>.value(
         value: mockRepository,
         child: MaterialApp(
           home: Scaffold(
@@ -59,6 +61,7 @@ void main() {
       )
     );
 
+    await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), '42');
     await tester.pump();
     expect(find.text('Warmup for 42.0'), findsOneWidget);
@@ -66,7 +69,7 @@ void main() {
 
   testWidgets('Does not render weight input when requiresWeight is false', (tester) async {
     await tester.pumpWidget(
-      Provider<WorkoutRepository>.value(
+      Provider<WorkoutRepository?>.value(
         value: mockRepository,
         child: const MaterialApp(
           home: Scaffold(
@@ -81,6 +84,7 @@ void main() {
       )
     );
 
+    await tester.pumpAndSettle();
     expect(find.text('Hollow Body Hold'), findsOneWidget);
     expect(find.byType(TextField), findsNothing);
   });

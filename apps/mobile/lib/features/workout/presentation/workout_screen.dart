@@ -5,7 +5,6 @@ import 'package:workout/core/storage/local_storage.dart';
 import 'package:workout/core/utils/warmup_utils.dart';
 import 'package:workout/features/workout/presentation/workout_split_widget.dart';
 import 'package:workout/features/workout/presentation/rest_stopwatch_widget.dart';
-import 'package:workout/core/utils/debouncer.dart';
 
 /// The main widget for the workout home screen, which contains a PageView for different workout splits.
 class WorkoutScreen extends StatefulWidget {
