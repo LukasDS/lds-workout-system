@@ -82,4 +82,27 @@ void main() {
     await tester.pump(const Duration(milliseconds: 501));
     verify(() => mockPrefs.setInt('currentIndex', 0)).called(1);
   });
+
+  testWidgets('WorkoutScreen loads with correct initial index', (tester) async {
+    final mockPrefs = MockSharedPreferences();
+    when(() => mockPrefs.getInt('currentIndex')).thenReturn(2);
+    when(() => mockPrefs.setInt('currentIndex', any())).thenAnswer((_) async => true);
+
+    final mockWorkoutRepository = MockWorkoutRepository();
+    when(() => mockWorkoutRepository.watchCurrentWeight(any()))
+        .thenAnswer((_) => Stream.value(null));
+
+    await tester.pumpWidget(
+      WorkoutApp(
+        prefs: mockPrefs,
+        initialIndex: 2,
+        workoutRepository: mockWorkoutRepository,
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // Verify "Legs" split (index 2) is visible initially
+    expect(find.text('Legs'), findsWidgets);
+  });
 }

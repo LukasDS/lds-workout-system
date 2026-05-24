@@ -95,4 +95,28 @@ void main() {
     stopwatchService.stop();
     await tester.pumpAndSettle();
   });
+
+  testWidgets('RestStopwatchWidget reloads state when app resumes', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ChangeNotifierProvider<StopwatchService>.value(
+            value: stopwatchService,
+            child: const RestStopwatchWidget(),
+          ),
+        ),
+      ),
+    );
+
+    // Manually update SharedPreferences to simulate background change
+    await prefs.setInt('stopwatch_previous_duration', 5000);
+    await prefs.setBool('stopwatch_is_running', false);
+
+    // Simulate app resume
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+
+    // Verify it shows 00:05
+    expect(find.text('00:05'), findsOneWidget);
+  });
 }
