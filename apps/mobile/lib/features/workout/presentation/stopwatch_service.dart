@@ -36,11 +36,11 @@ class StopwatchService extends ChangeNotifier {
   Future<void> reloadState() async {
     // FORCE Flutter to read the native changes from the disk file
     await _prefs.reload();
-    _loadState();
+    _loadState(updateNative: false); // Skip update back to native as native just told us to reload
     notifyListeners();
   }
 
-  void _loadState() {
+  void _loadState({bool updateNative = true}) {
     final startTimeMillis = _prefs.getInt(_keyStartTime);
     if (startTimeMillis != null) {
       _startTime = DateTime.fromMillisecondsSinceEpoch(startTimeMillis);
@@ -52,13 +52,13 @@ class StopwatchService extends ChangeNotifier {
 
     if (_isRunning) {
       _startTimer();
-      _updateNativeNotification();
+      if (updateNative) _updateNativeNotification();
     } else {
       _timer?.cancel();
       _timer = null;
       // If there's an active (but paused) timer, ensure the notification is shown
       if (_previousDuration > Duration.zero) {
-        _updateNativeNotification();
+        if (updateNative) _updateNativeNotification();
       }
     }
   }
