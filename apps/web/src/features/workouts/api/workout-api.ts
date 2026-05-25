@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { db } from "@/lib/firebase";
 import { 
   collection, 
@@ -18,7 +19,7 @@ const COLLECTION_NAME = "lukas_exercises";
  * for each exercise to determine its 'lastUpdated' status. This is a known performance 
  * bottleneck that should be remediated by denormalizing 'lastUpdated' onto the exercise document.
  */
-export async function getExercises(): Promise<ExerciseEntry[]> {
+export const getExercises = cache(async function getExercises(): Promise<ExerciseEntry[]> {
   try {
     const querySnapshot = await getDocs(collection(db, COLLECTION_NAME));
     
@@ -57,6 +58,13 @@ export async function getExercises(): Promise<ExerciseEntry[]> {
   } catch (error) {
     throw new Error(`Failed to fetch exercises: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
+});
+
+/**
+ * Returns the default list of exercise names to select (Top 5 most recent).
+ */
+export function getDefaultSelectedExercises(exercises: ExerciseEntry[]): string[] {
+  return exercises.slice(0, 5).map((e) => e.name);
 }
 
 export async function getExerciseHistory(exerciseName: string): Promise<HistoryEntry[]> {

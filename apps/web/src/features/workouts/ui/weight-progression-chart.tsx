@@ -13,6 +13,7 @@ import {
   Brush,
 } from "recharts";
 import type { ChartDataPoint } from "../model/types";
+import { ChartSkeleton } from "./skeletons";
 
 interface WeightProgressionChartProps {
   data: ChartDataPoint[];
@@ -61,7 +62,7 @@ export function WeightProgressionChart({ data, selectedExercises }: WeightProgre
   };
 
   if (!hasMounted) {
-    return <div className="w-full h-[550px] bg-zinc-50/50 animate-pulse rounded-2xl dark:bg-zinc-900/50" />;
+    return <ChartSkeleton />;
   }
 
   return (

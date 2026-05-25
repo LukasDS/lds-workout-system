@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Search, X, CheckCircle2 } from "lucide-react";
 import type { ExerciseEntry } from "../model/types";
@@ -8,19 +9,35 @@ import type { ExerciseEntry } from "../model/types";
 interface ExerciseSelectorProps {
   exercises: ExerciseEntry[];
   selectedExercises: string[];
-  onToggle: (exercise: string) => void;
-  onSelectNone: () => void;
-  onSelectTop5: () => void;
 }
 
 export function ExerciseSelector({ 
   exercises, 
   selectedExercises, 
-  onToggle,
-  onSelectNone,
-  onSelectTop5
 }: ExerciseSelectorProps) {
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [, startTransition] = useTransition();
+
+  const updateSelection = (newSelection: string[]) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("exercises", newSelection.join(","));
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    });
+  };
+
+  const onToggle = (name: string) => {
+    const next = selectedExercises.includes(name)
+      ? selectedExercises.filter((e) => e !== name)
+      : [...selectedExercises, name];
+    updateSelection(next);
+  };
+
+  const onSelectNone = () => updateSelection([]);
+  const onSelectTop5 = () => updateSelection(exercises.slice(0, 5).map((e) => e.name));
 
   const filteredExercises = exercises.filter((e) =>
     e.name.toLowerCase().includes(searchTerm.toLowerCase())

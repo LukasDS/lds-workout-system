@@ -1,7 +1,10 @@
+import { Suspense } from "react";
 import { 
   WorkoutDashboard, 
-  getExercises, 
-  getCombinedHistory 
+  ExerciseSelectorContainer,
+  HistoryChartContainer,
+  SidebarSkeleton,
+  ChartSkeleton,
 } from "@/features/workouts";
 
 export default async function Home({
@@ -11,29 +14,27 @@ export default async function Home({
 }) {
   const { exercises: exercisesParam } = await searchParams;
   
-  // 1. Fetch all exercises for the sidebar
-  const allExercises = await getExercises();
+  let selectedNames: string[] | undefined = undefined;
   
-  // 2. Determine which exercises are selected
-  let selectedNames: string[] = [];
   if (exercisesParam !== undefined) {
     const rawValue = Array.isArray(exercisesParam) ? exercisesParam[0] : exercisesParam;
     selectedNames = (rawValue || "").split(",").filter(Boolean);
-  } else {
-    // Default to top 5 recent if no param is provided
-    selectedNames = allExercises.slice(0, 5).map(e => e.name);
   }
-
-  // 3. Fetch chart data for selected exercises
-  const chartData = await getCombinedHistory(selectedNames);
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black">
       <main className="mx-auto max-w-[1600px] p-4 sm:p-6 lg:p-8">
         <WorkoutDashboard 
-          exercises={allExercises}
-          chartData={chartData}
-          selectedExercises={selectedNames}
+          sidebar={
+            <Suspense fallback={<SidebarSkeleton />}>
+              <ExerciseSelectorContainer selectedExercises={selectedNames} />
+            </Suspense>
+          }
+          chart={
+            <Suspense key={JSON.stringify(selectedNames)} fallback={<ChartSkeleton />}>
+              <HistoryChartContainer selectedExercises={selectedNames} />
+            </Suspense>
+          }
         />
       </main>
     </div>
