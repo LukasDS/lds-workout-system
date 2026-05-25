@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Search, X, CheckCircle2 } from "lucide-react";
 import type { ExerciseEntry } from "../model/types";
