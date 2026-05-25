@@ -2,7 +2,7 @@
 
 **LDS Workout System** is a modern monorepo designed to help users manage workout routines, track weights, and calculate personalized warmup sets.
 
-This project currently features a functional **Flutter** mobile application and a foundational **Next.js** web architecture, using **Firebase** for data persistence.
+This project features a functional **Flutter** mobile application and a **Next.js** web application for data visualization, using **Firebase** for data persistence.
 
 ## Features at a Glance
 
@@ -10,13 +10,14 @@ This project currently features a functional **Flutter** mobile application and 
 - **Weight Tracking**: Edit and track your current working weights for each exercise.
 - **Smart Warmup Calculator**: Automated warmup set suggestions based on your working weights and equipment (Barbell, EZ-Bar, Dumbbells).
 - **Rest Stopwatch**: Integrated timer to manage rest periods between sets.
+- **Weight Progression Visualization**: Interactive charts in the web app to track strength gains over time with exercise selection and timeline zooming.
 - **Data Persistence**: Real-time synchronization with Cloud Firestore.
-- **Modern Stack**: Flutter for mobile, Next.js for web (in progress), and Firebase for backend services.
+- **Modern Stack**: Flutter for mobile, Next.js 15+ for web, and Firebase for backend services.
 
 ## System Overview
 
 - **Flutter Mobile App (`apps/mobile`):** A feature-rich mobile UI for tracking workouts, managing weights, and viewing warmup recommendations.
-- **Next.js Web App (`apps/web`):** A modern TypeScript web application (currently in the scaffolding phase) aimed at providing a desktop-friendly dashboard.
+- **Next.js Web App (`apps/web`):** A modern TypeScript dashboard for visualizing weight progression and long-term strength trends.
 - **Firebase Integration:** Shared backend for data storage and real-time updates.
 
 ## Getting Started
@@ -37,11 +38,14 @@ To run the mobile app:
 ### Web
 To run the web app:
 1. Navigate to `apps/web`.
-2. Install dependencies:
+2. Configure environment variables:
+   - Copy `.env.example` to `.env.local`.
+   - Fill in your Firebase configuration keys.
+3. Install dependencies:
    ```bash
    pnpm install
    ```
-3. Run the development server:
+4. Run the development server:
    ```bash
    pnpm dev
    ```
@@ -51,4 +55,4 @@ This project is built and maintained by Lukas Daugaard Schröder. For questions 
 
 ## Dependencies & Acknowledgments
 - **Flutter**: cloud_firestore, firebase_core, provider, shared_preferences.
-- **Next.js**: React, Tailwind CSS, TypeScript.
+- **Next.js**: React 19, Recharts, Firebase SDK, Tailwind CSS, TypeScript.
