@@ -10,8 +10,10 @@ import {
   ResponsiveContainer,
   Legend,
   Brush,
+  type TooltipContentProps,
 } from "recharts";
 import type { ChartDataPoint } from "../../domain/types";
+import type { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
 
 interface WeightProgressionChartProps {
   data: ChartDataPoint[];
@@ -31,6 +33,49 @@ const COLORS = [
   "#4d7c0f", // lime-700
 ];
 
+const formatDate = (dateValue: unknown) => {
+  try {
+    const dateStr = String(dateValue);
+    // Parse YYYY-MM-DD as a local date to avoid UTC shift bugs
+    const [year, month, day] = dateStr.split("-").map(Number);
+    if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+      const date = new Date(year, month - 1, day);
+      return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    }
+    return dateStr;
+  } catch {
+    return String(dateValue);
+  }
+};
+
+function CustomTooltip({ active, payload, label }: TooltipContentProps<ValueType, NameType>) {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white/95 dark:bg-zinc-950/95 border border-zinc-200 dark:border-zinc-800 shadow-xl rounded-xl p-3 backdrop-blur-sm">
+        <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-2">{formatDate(label)}</p>
+        <div className="space-y-1.5">
+          {payload.map((entry) => (
+            <div key={entry.name} className="flex items-center gap-2">
+              <div 
+                className="w-2 h-2 rounded-full" 
+                style={{ backgroundColor: entry.color }}
+              />
+              <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+                {entry.name}:
+              </span>
+              <span className="text-xs text-zinc-700 dark:text-zinc-300">
+                {entry.value}kg
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
+
 export function WeightProgressionChart({ data, selectedExercises }: WeightProgressionChartProps) {
   if (data.length === 0) {
     return (
@@ -40,21 +85,6 @@ export function WeightProgressionChart({ data, selectedExercises }: WeightProgre
       </div>
     );
   }
-
-  const formatDate = (dateValue: unknown) => {
-    try {
-      const dateStr = String(dateValue);
-      // Parse YYYY-MM-DD as a local date to avoid UTC shift bugs
-      const [year, month, day] = dateStr.split("-").map(Number);
-      if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
-        const date = new Date(year, month - 1, day);
-        return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-      }
-      return dateStr;
-    } catch {
-      return String(dateValue);
-    }
-  };
 
   return (
     <div className="w-full h-full min-w-0">
@@ -76,17 +106,7 @@ export function WeightProgressionChart({ data, selectedExercises }: WeightProgre
             unit="kg"
             width={40}
           />
-          <Tooltip 
-            labelFormatter={formatDate}
-            contentStyle={{ 
-              borderRadius: '12px', 
-              border: '1px solid #e4e4e7',
-              boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(4px)'
-            }}
-            itemStyle={{ fontSize: '12px', padding: '2px 0' }}
-          />
+          <Tooltip content={CustomTooltip} />
           <Legend 
             verticalAlign="top" 
             height={50} 
