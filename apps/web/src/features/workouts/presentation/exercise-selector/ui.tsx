@@ -5,6 +5,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Search, X, CheckCircle2 } from "lucide-react";
 import type { ExerciseEntry } from "../../domain/types";
+import { getDefaultSelectedExercises } from "../../domain/logic";
 
 interface ExerciseSelectorProps {
   exercises: ExerciseEntry[];
@@ -37,7 +38,7 @@ export function ExerciseSelector({
   };
 
   const onSelectNone = () => updateSelection([]);
-  const onSelectTop5 = () => updateSelection(exercises.slice(0, 5).map((e) => e.name));
+  const onSelectTop5 = () => updateSelection(getDefaultSelectedExercises(exercises));
 
   const filteredExercises = exercises.filter((e) =>
     e.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -45,8 +46,14 @@ export function ExerciseSelector({
 
   const formatLastUpdated = (date: Date | null) => {
     if (!date) return "No history";
+    
+    // Normalize to start of day for comparison
     const now = new Date();
-    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 3600 * 24));
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const targetDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    
+    const diffTime = today.getTime() - targetDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 3600 * 24));
     
     if (diffDays === 0) return "Today";
     if (diffDays === 1) return "Yesterday";

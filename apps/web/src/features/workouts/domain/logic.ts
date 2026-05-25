@@ -1,34 +1,35 @@
-import type { HistoryEntry, ChartDataPoint } from "./types";
+/**
+ * Returns the default list of exercise names to select (Top 5 most recent).
+ */
+export function getDefaultSelectedExercises(exercises: { name: string }[]): string[] {
+  return exercises.slice(0, 5).map((e) => e.name);
+}
 
 /**
- * Merges history from multiple exercises into a single chronological array for Recharts.
- * Uses local date strings for grouping to avoid UTC shift bugs.
+ * Sanitizes and validates the user-requested exercise selection.
+ * Handles deduplication and filters out names that don't exist in the available list.
  */
-export function transformHistoriesToChartData(
-  historiesMap: Record<string, HistoryEntry[]>
-): ChartDataPoint[] {
-  const dateMap: Record<string, Record<string, number>> = {};
+export function validateExerciseSelection(
+  requested: string[],
+  available: { name: string }[]
+): string[] {
+  const availableNames = new Set(available.map((e) => e.name));
+  const uniqueRequested = Array.from(new Set(requested));
   
-  Object.entries(historiesMap).forEach(([exerciseName, entries]) => {
-    entries.forEach((entry) => {
-      // Use local YYYY-MM-DD to avoid UTC date shift bugs
-      const year = entry.date.getFullYear();
-      const month = String(entry.date.getMonth() + 1).padStart(2, '0');
-      const day = String(entry.date.getDate()).padStart(2, '0');
-      const dateStr = `${year}-${month}-${day}`;
-      
-      if (!dateMap[dateStr]) {
-        dateMap[dateStr] = {};
-      }
-      dateMap[dateStr][exerciseName] = entry.weight;
-    });
-  });
+  return uniqueRequested.filter((name) => availableNames.has(name));
+}
 
-  // Convert map to sorted array
-  return Object.entries(dateMap)
-    .sort(([dateA], [dateB]) => dateA.localeCompare(dateB))
-    .map(([date, weights]) => ({
-      date,
-      ...weights,
-    }));
+/**
+ * Resolves the effective exercise selection based on user request and available exercises.
+ * Centralizes the policy: if undefined (initial load), use default 5; 
+ * otherwise (even if empty) respect the user's explicit selection.
+ */
+export function resolveExerciseSelection(
+  rawRequested: string[] | undefined,
+  available: { name: string }[]
+): string[] {
+  if (rawRequested === undefined) {
+    return getDefaultSelectedExercises(available);
+  }
+  return validateExerciseSelection(rawRequested, available);
 }

@@ -40,7 +40,7 @@ To run the web app:
 1. Navigate to `apps/web`.
 2. Configure environment variables:
    - Copy `.env.example` to `.env.local`.
-   - Fill in your Firebase configuration keys.
+   - Fill in your `FIREBASE_PROJECT_ID` and `FIREBASE_SERVICE_ACCOUNT`.
 3. Install dependencies:
    ```bash
    pnpm install
@@ -49,10 +49,14 @@ To run the web app:
    ```bash
    pnpm dev
    ```
+5. Run tests:
+   ```bash
+   pnpm test
+   ```
 
 ## About
 This project is built and maintained by Lukas Daugaard Schröder. For questions or architectural discussions, please [contact me](https://www.linkedin.com/in/lukas-daugaard-schroeder).
 
 ## Dependencies & Acknowledgments
 - **Flutter**: cloud_firestore, firebase_core, provider, shared_preferences.
-- **Next.js**: React 19, Recharts, Firebase SDK, Tailwind CSS, TypeScript.
+- **Next.js**: React 19, Recharts, Firebase Admin SDK, Tailwind CSS 4, Vitest, TypeScript.

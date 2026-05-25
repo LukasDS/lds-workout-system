@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -13,7 +12,6 @@ import {
   Brush,
 } from "recharts";
 import type { ChartDataPoint } from "../../domain/types";
-import { ChartSkeleton } from "./skeleton";
 
 interface WeightProgressionChartProps {
   data: ChartDataPoint[];
@@ -34,13 +32,6 @@ const COLORS = [
 ];
 
 export function WeightProgressionChart({ data, selectedExercises }: WeightProgressionChartProps) {
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setHasMounted(true);
-  }, []);
-
   if (data.length === 0) {
     return (
       <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-800">
@@ -53,17 +44,17 @@ export function WeightProgressionChart({ data, selectedExercises }: WeightProgre
   const formatDate = (dateValue: unknown) => {
     try {
       const dateStr = String(dateValue);
-      const date = new Date(dateStr);
-      if (isNaN(date.getTime())) return dateStr;
-      return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      // Parse YYYY-MM-DD as a local date to avoid UTC shift bugs
+      const [year, month, day] = dateStr.split("-").map(Number);
+      if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+        const date = new Date(year, month - 1, day);
+        return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      }
+      return dateStr;
     } catch {
       return String(dateValue);
     }
   };
-
-  if (!hasMounted) {
-    return <ChartSkeleton />;
-  }
 
   return (
     <div className="w-full h-full min-w-0">

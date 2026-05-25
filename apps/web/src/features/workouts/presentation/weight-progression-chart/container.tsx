@@ -1,5 +1,8 @@
-import { getCombinedHistory, getExercises, getDefaultSelectedExercises } from "../../data/workout-api";
-import { WeightProgressionChart } from "./ui";
+import { WorkoutRepository } from "../../data/workout-repository";
+import { resolveExerciseSelection } from "../../domain/logic";
+import { transformHistoriesToChartData } from "./transform";
+import { ChartClientWrapper } from "./client-wrapper";
+import type { HistoryEntry } from "../../domain/types";
 
 interface WeightProgressionChartContainerProps {
   selectedExercises?: string[];
@@ -8,18 +11,32 @@ interface WeightProgressionChartContainerProps {
 export async function WeightProgressionChartContainer({ 
   selectedExercises 
 }: WeightProgressionChartContainerProps) {
-  let effectiveSelection = selectedExercises;
+  const exercises = await WorkoutRepository.getExercises();
   
-  // If undefined (initial load), use central business logic for default selection
-  if (effectiveSelection === undefined) {
-    const exercises = await getExercises();
-    effectiveSelection = getDefaultSelectedExercises(exercises);
+  // Use central domain logic for determining the effective selection
+  const effectiveSelection = resolveExerciseSelection(selectedExercises, exercises);
+  
+  if (effectiveSelection.length === 0) {
+    return (
+      <ChartClientWrapper 
+        data={[]} 
+        selectedExercises={[]} 
+      />
+    );
   }
-  
-  const chartData = await getCombinedHistory(effectiveSelection);
+
+  // Fetch all histories in parallel using the repository
+  const historiesMap: Record<string, HistoryEntry[]> = {};
+  await Promise.all(
+    effectiveSelection.map(async (name) => {
+      historiesMap[name] = await WorkoutRepository.getExerciseHistory(name);
+    })
+  );
+
+  const chartData = transformHistoriesToChartData(historiesMap);
   
   return (
-    <WeightProgressionChart 
+    <ChartClientWrapper 
       data={chartData} 
       selectedExercises={effectiveSelection} 
     />

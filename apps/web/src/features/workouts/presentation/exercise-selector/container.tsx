@@ -1,4 +1,5 @@
-import { getExercises, getDefaultSelectedExercises } from "../../data/workout-api";
+import { WorkoutRepository } from "../../data/workout-repository";
+import { resolveExerciseSelection } from "../../domain/logic";
 import { ExerciseSelector } from "./ui";
 
 interface ExerciseSelectorContainerProps {
@@ -8,10 +9,10 @@ interface ExerciseSelectorContainerProps {
 export async function ExerciseSelectorContainer({ 
   selectedExercises 
 }: ExerciseSelectorContainerProps) {
-  const exercises = await getExercises();
+  const exercises = await WorkoutRepository.getExercises();
   
-  // If undefined (initial load), use central business logic for default selection
-  const effectiveSelection = selectedExercises ?? getDefaultSelectedExercises(exercises);
+  // Use central domain logic for determining the effective selection
+  const effectiveSelection = resolveExerciseSelection(selectedExercises, exercises);
   
   return (
     <ExerciseSelector 
