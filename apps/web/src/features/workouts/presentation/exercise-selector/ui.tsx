@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Search, X, CheckCircle2 } from "lucide-react";
-import type { ExerciseEntry } from "../model/types";
+import type { ExerciseEntry } from "../../domain/types";
 
 interface ExerciseSelectorProps {
   exercises: ExerciseEntry[];

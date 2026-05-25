@@ -1,6 +1,5 @@
-export { WorkoutDashboard } from "./ui/workout-dashboard";
-export { ExerciseSelectorContainer } from "./ui/exercise-selector-container";
-export { HistoryChartContainer } from "./ui/history-chart-container";
-export * from "./ui/skeletons";
-export * from "./api/workout-api";
-export type * from "./model/types";
+export { WorkoutDashboard } from "./presentation/workout-dashboard";
+export * from "./presentation/exercise-selector";
+export * from "./presentation/weight-progression-chart";
+export * from "./data/workout-api";
+export type * from "./domain/types";

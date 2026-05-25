@@ -1,13 +1,13 @@
-import { getCombinedHistory, getExercises, getDefaultSelectedExercises } from "../api/workout-api";
-import { WeightProgressionChart } from "./weight-progression-chart";
+import { getCombinedHistory, getExercises, getDefaultSelectedExercises } from "../../data/workout-api";
+import { WeightProgressionChart } from "./ui";
 
-interface HistoryChartContainerProps {
+interface WeightProgressionChartContainerProps {
   selectedExercises?: string[];
 }
 
-export async function HistoryChartContainer({ 
+export async function WeightProgressionChartContainer({ 
   selectedExercises 
-}: HistoryChartContainerProps) {
+}: WeightProgressionChartContainerProps) {
   let effectiveSelection = selectedExercises;
   
   // If undefined (initial load), use central business logic for default selection

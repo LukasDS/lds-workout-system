@@ -12,8 +12,8 @@ import {
   Legend,
   Brush,
 } from "recharts";
-import type { ChartDataPoint } from "../model/types";
-import { ChartSkeleton } from "./skeletons";
+import type { ChartDataPoint } from "../../domain/types";
+import { ChartSkeleton } from "./skeleton";
 
 interface WeightProgressionChartProps {
   data: ChartDataPoint[];

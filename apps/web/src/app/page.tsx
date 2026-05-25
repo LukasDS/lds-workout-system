@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { 
   WorkoutDashboard, 
   ExerciseSelectorContainer,
-  HistoryChartContainer,
+  WeightProgressionChartContainer,
   SidebarSkeleton,
   ChartSkeleton,
 } from "@/features/workouts";
@@ -32,7 +32,7 @@ export default async function Home({
           }
           chart={
             <Suspense key={JSON.stringify(selectedNames)} fallback={<ChartSkeleton />}>
-              <HistoryChartContainer selectedExercises={selectedNames} />
+              <WeightProgressionChartContainer selectedExercises={selectedNames} />
             </Suspense>
           }
         />

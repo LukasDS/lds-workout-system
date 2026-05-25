@@ -8,8 +8,8 @@ import {
   limit, 
   Timestamp 
 } from "firebase/firestore";
-import type { ExerciseEntry, HistoryEntry, ChartDataPoint } from "../model/types";
-import { transformHistoriesToChartData } from "../model/logic";
+import type { ExerciseEntry, HistoryEntry, ChartDataPoint } from "../domain/types";
+import { transformHistoriesToChartData } from "../domain/logic";
 
 const COLLECTION_NAME = "lukas_exercises";
 

@@ -1,5 +1,5 @@
-import { getExercises, getDefaultSelectedExercises } from "../api/workout-api";
-import { ExerciseSelector } from "./exercise-selector";
+import { getExercises, getDefaultSelectedExercises } from "../../data/workout-api";
+import { ExerciseSelector } from "./ui";
 
 interface ExerciseSelectorContainerProps {
   selectedExercises?: string[];
