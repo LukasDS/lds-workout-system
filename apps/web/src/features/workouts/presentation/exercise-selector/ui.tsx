@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Search, X, CheckCircle2 } from "lucide-react";
@@ -21,10 +21,15 @@ export function ExerciseSelector({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const updateSelection = (newSelection: string[]) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("exercises", newSelection.join(","));
+    params.set("exercises", newSelection.join(";"));
     startTransition(() => {
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     });
@@ -123,7 +128,7 @@ export function ExerciseSelector({
                   {exercise.name}
                 </div>
                 <div className="text-[10px] text-zinc-500 dark:text-zinc-400">
-                  Last updated: {formatLastUpdated(exercise.lastUpdated)}
+                  Last updated: {mounted ? formatLastUpdated(exercise.lastUpdated) : "Loading..."}
                 </div>
               </div>
               {isSelected && (

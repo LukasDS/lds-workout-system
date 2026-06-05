@@ -18,7 +18,7 @@ export default async function Home({
   
   if (exercisesParam !== undefined) {
     const rawValue = Array.isArray(exercisesParam) ? exercisesParam[0] : exercisesParam;
-    selectedNames = (rawValue || "").split(",").filter(Boolean);
+    selectedNames = (rawValue || "").split(";").filter(Boolean);
   }
 
   return (
