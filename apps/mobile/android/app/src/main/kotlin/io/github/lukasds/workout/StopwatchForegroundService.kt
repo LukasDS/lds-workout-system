@@ -11,7 +11,7 @@ import androidx.core.app.NotificationCompat
 
 class StopwatchForegroundService : Service() {
 
-    private val CHANNEL_ID = "stopwatch_channel_v10"
+    private val CHANNEL_ID = "stopwatch_channel_v13"
     private val NOTIFICATION_ID = 888
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -65,13 +65,13 @@ class StopwatchForegroundService : Service() {
             isRunning
         )
 
-        // Set Play/Pause icon
+        // Update Play/Pause icon in the custom layout
         notificationLayout.setImageViewResource(
             R.id.notification_action_play_pause,
             if (isRunning) R.drawable.ic_pause else R.drawable.ic_play
         )
 
-        // Set PendingIntents for actions
+        // Set click handlers for RemoteViews layout buttons
         notificationLayout.setOnClickPendingIntent(R.id.notification_action_play_pause, getPendingIntent("ACTION_PLAY_PAUSE"))
         notificationLayout.setOnClickPendingIntent(R.id.notification_action_reset, getPendingIntent("ACTION_RESET"))
         notificationLayout.setOnClickPendingIntent(R.id.notification_action_stop, getPendingIntent("ACTION_STOP"))
@@ -102,12 +102,26 @@ class StopwatchForegroundService : Service() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val manager = getSystemService(NotificationManager::class.java)
+            
+            // Clean up the old channels
+            try {
+                manager.deleteNotificationChannel("stopwatch_channel_v10")
+                manager.deleteNotificationChannel("stopwatch_channel_v11")
+                manager.deleteNotificationChannel("stopwatch_channel_v12")
+            } catch (e: Exception) {
+                // Ignore if not present
+            }
+
             val serviceChannel = NotificationChannel(
                 CHANNEL_ID,
                 "Rest Timer",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_DEFAULT
             )
-            val manager = getSystemService(NotificationManager::class.java)
+            serviceChannel.setSound(null, null)
+            serviceChannel.enableVibration(false)
+            serviceChannel.enableLights(false)
+            
             manager.createNotificationChannel(serviceChannel)
         }
     }

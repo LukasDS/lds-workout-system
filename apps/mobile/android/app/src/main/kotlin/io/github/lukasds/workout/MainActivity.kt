@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -54,7 +55,11 @@ class MainActivity: FlutterActivity() {
 
         // Register the signal receiver
         val filter = IntentFilter("io.github.lukasds.workout.STOPWATCH_SYNC")
-        registerReceiver(syncReceiver, filter)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(syncReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(syncReceiver, filter)
+        }
     }
 
     override fun onDestroy() {
@@ -77,3 +82,4 @@ class MainActivity: FlutterActivity() {
         }
     }
 }
+
