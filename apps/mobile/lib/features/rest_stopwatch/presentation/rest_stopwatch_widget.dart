@@ -42,7 +42,7 @@ class _RestStopwatchWidgetState extends State<RestStopwatchWidget> with WidgetsB
     final stopwatchService = Provider.of<RestStopwatchService>(context);
 
     return SizedBox(
-      height: 60,
+      height: 64,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
@@ -54,55 +54,52 @@ class _RestStopwatchWidgetState extends State<RestStopwatchWidget> with WidgetsB
             ),
           ),
         ),
-        child: SafeArea(
-          top: false,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.timer_outlined, color: Colors.white70, size: 20),
-                  const SizedBox(width: 12),
-                  SizedBox(
-                    width: 76,
-                    child: Text(
-                      _formatDuration(stopwatchService.elapsedDuration),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'monospace',
-                      ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.timer_outlined, color: Colors.white70, size: 20),
+                const SizedBox(width: 12),
+                SizedBox(
+                  width: 76,
+                  child: Text(
+                    _formatDuration(stopwatchService.elapsedDuration),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'monospace',
                     ),
                   ),
-                ],
-              ),
-              Row(
-                children: [
-                  if (!stopwatchService.isRunning)
-                    IconButton(
-                      icon: const Icon(Icons.play_arrow_rounded, size: 32),
-                      color: theme.colorScheme.primary,
-                      onPressed: stopwatchService.start,
-                      tooltip: 'Start',
-                    )
-                  else
-                    IconButton(
-                      icon: const Icon(Icons.pause_rounded, size: 32),
-                      color: theme.colorScheme.primary,
-                      onPressed: stopwatchService.pause,
-                      tooltip: 'Pause',
-                    ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                if (!stopwatchService.isRunning)
                   IconButton(
-                    icon: const Icon(Icons.refresh_rounded, size: 28),
-                    color: Colors.white70,
-                    onPressed: stopwatchService.reset,
-                    tooltip: 'Reset',
+                    icon: const Icon(Icons.play_arrow_rounded, size: 32),
+                    color: theme.colorScheme.primary,
+                    onPressed: stopwatchService.start,
+                    tooltip: 'Start',
+                  )
+                else
+                  IconButton(
+                    icon: const Icon(Icons.pause_rounded, size: 32),
+                    color: theme.colorScheme.primary,
+                    onPressed: stopwatchService.pause,
+                    tooltip: 'Pause',
                   ),
-                ],
-              ),
-            ],
-          ),
+                IconButton(
+                  icon: const Icon(Icons.refresh_rounded, size: 28),
+                  color: Colors.white70,
+                  onPressed: stopwatchService.reset,
+                  tooltip: 'Reset',
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
