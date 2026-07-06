@@ -83,6 +83,7 @@ class StopwatchForegroundService : Service() {
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_timer)
             .setCustomContentView(notificationLayout)
+            .setCustomBigContentView(notificationLayout)
             .setContentIntent(mainPendingIntent)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
